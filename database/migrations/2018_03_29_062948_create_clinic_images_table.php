@@ -16,7 +16,7 @@ class CreateClinicImagesTable extends Migration
         Schema::create('clinic_images', function (Blueprint $table) {
             $table->increments('id');
             $table->integer('clinic_id');
-            $table->integer('image');
+            $table->string('image');
             $table->timestamps();
         });
     }

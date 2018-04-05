@@ -17,7 +17,7 @@
             $table->increments('id');
             $table->integer('doctor_id');
             $table->string('name')->nullable();
-            $table->integer('banner_image')->nullable();
+            $table->string('banner_image')->nullable();
             $table->timestamps();
         });
     }

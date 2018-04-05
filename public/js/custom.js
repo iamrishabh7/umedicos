@@ -58,7 +58,7 @@ $(document).ready(function() {
 					console.log(data);
 					if(data.flag){
 						$('.loginModal').modal('toggle');
-						window.location.href = data.next_url; 
+						swal('Success',data.message,'success');
 					}else{
 						$('.loginModal').modal('toggle');
 						swal('Oops',data.message,'error');  

@@ -21,6 +21,7 @@ class CreateUsersTable extends Migration
             $table->integer('role');
             $table->integer('auth_token')->nullable();
             $table->integer('is_active')->default(true);
+            $table->integer('is_profile_completed')->default(false);
             $table->rememberToken();
             $table->timestamps();
         });

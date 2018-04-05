@@ -28,19 +28,22 @@ class AuthController extends Controller
 			$user->role = $request->reg_role;
 			if($user->save()){
 				$response['flag'] = true;
-				$response['message'] = "Created Successfully";
+				$response['message'] = "Registered Successfully";
 				if($request->reg_role == 1){
 					$doctor = new Doctor;
 					$doctor->doctor_id = $user->id;
 					$doctor->primary_contact = $request->reg_mobile;
 					$doctor->save();
-					$response['next_url'] = url('/').'/doctor/profile/edit';
+
+					$doctor_clinic = new DoctorClinic;
+					$doctor_clinic->doctor_id = $user->id;
+					$doctor_clinic->save();
+					
 				}else{
 					$patient = new Patient;
 					$patient->patient_id = $user->id;
 					$patient->primary_contact = $request->reg_mobile;
 					$patient->save();
-					$response['next_url'] = url('/').'/patient/profile/edit';
 				}
 			}else{
 				$response['flag'] = false;
@@ -57,10 +60,18 @@ class AuthController extends Controller
 			$user = \Auth::user();
 			if($user->role == 1){
 				$response['flag'] = true;
-				$response['next_url'] = url('/').'/doctor/profile';
+				if($user->is_profile_completed){
+					$response['next_url'] = url('/').'/doctor/profile';
+				}else{
+					$response['next_url'] = url('/').'/doctor/profile/edit';
+				}
 			}else{
 				$response['flag'] = true;
-				$response['next_url'] = url('/').'/patient/profile';
+				if($user->is_profile_completed){
+					$response['next_url'] = url('/').'/patient/profile';
+				}else{
+					$response['next_url'] = url('/').'/patient/profile/edit';
+				}
 			}
 		}
 		else{

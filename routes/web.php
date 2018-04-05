@@ -16,3 +16,6 @@ Route::post('/login','AuthController@login');
 Route::get('/search','HomeController@search');
 Route::get('/doctorID/{id}','HomeController@doctorPublieProfile');
 Route::get('/doctor/profile','HomeController@index');
+Route::get('/doctor/profile/edit','DoctorController@getEditProfile');
+Route::post('/doctor/profile/edit','DoctorController@postEditProfile');
+Route::get('/patient/profile/edit','PatientController@getEditProfile');
