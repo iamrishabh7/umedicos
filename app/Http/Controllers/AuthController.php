@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use App\User;
 use App\Doctor;
 use App\Patient;
+use Auth;
 class AuthController extends Controller
 {
 	public function index()
@@ -80,6 +81,10 @@ class AuthController extends Controller
 		}
 		return response()->json($response);
 	}
-
+	public function logout()
+	{
+		Auth::logout();
+		return redirect('/');
+	}
 
 }

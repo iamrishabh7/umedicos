@@ -2,29 +2,11 @@
 @section('content')
 @section('title','Profile')
 
-<nav class="navbar navbar-inverse "  role="navigation">
-  <div class="container-fluid">
-    <div class="navbar-header">
-      <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-ex1-collapse">
-        <span class="sr-only">Toggle navigation</span>
-        <span class="icon-bar"></span>
-        <span class="icon-bar"></span>
-        <span class="icon-bar"></span>
-      </button>
-      <a class="navbar-brand" href="#">Title</a>
-    </div>
 
-    <div class="collapse navbar-collapse navbar-ex1-collapse">
-      <ul class="nav navbar-nav navbar-right">
-        <li><a class="" data-toggle="modal" href='#loginModal'>Login</a></li>
-      </ul>
-    </div>
-  </div>
-</nav>
 <div class="search">
   <i onClick="locate()"> </i>
   <div class="s-bar">
-    <form action="{{URL('search')}}">
+    <form action="{{URL('search')}}" id="searchDoctorForm">
       {{csrf_field()}}
       <input type="text" id="pac-input" name="address">
       <input type="submit"  value="Search"/>
@@ -60,9 +42,9 @@
                 <label for="login_password">Password:</label>
                 <input type="password" class="form-control" id="login_password" placeholder="Enter password" name="login_password">
               </div>
-              <div class="checkbox">
+             <!--  <div class="checkbox">
                 <label><input type="checkbox" name="remember"> Remember me</label>
-              </div>
+              </div> -->
               <button type="submit" class="btn btn-default">Login</button>
             </form>
           </div>
@@ -124,65 +106,6 @@
     }
   }
 
-
-  function initAutocomplete() {
-    var map = new google.maps.Map(document.getElementById('map'), {
-      center: {lat: -33.8688, lng: 151.2195},
-      zoom: 13,
-      mapTypeId: 'roadmap'
-    });
-
-    var input = document.getElementById('pac-input');
-    var searchBox = new google.maps.places.SearchBox(input);
-    map.controls[google.maps.ControlPosition.TOP_LEFT].push(input);
-
-    map.addListener('bounds_changed', function() {
-      searchBox.setBounds(map.getBounds());
-    });
-
-    var markers = [];
-    searchBox.addListener('places_changed', function() {
-      var places = searchBox.getPlaces();
-
-      if (places.length == 0) {
-        return;
-      }
-
-      markers.forEach(function(marker) {
-        marker.setMap(null);
-      });
-      markers = [];
-
-      var bounds = new google.maps.LatLngBounds();
-      places.forEach(function(place) {
-        if (!place.geometry) {
-          console.log("Returned place contains no geometry");
-          return;
-        }
-        var icon = {
-          url: place.icon,
-          size: new google.maps.Size(71, 71),
-          origin: new google.maps.Point(0, 0),
-          anchor: new google.maps.Point(17, 34),
-          scaledSize: new google.maps.Size(25, 25)
-        };
-
-        markers.push(new google.maps.Marker({
-          map: map,
-          icon: icon,
-          title: place.name,
-          position: place.geometry.location
-        }));
-
-        if (place.geometry.viewport) {
-          bounds.union(place.geometry.viewport);
-        } else {
-          bounds.extend(place.geometry.location);
-        }
-      });
-      map.fitBounds(bounds);
-    });
-  }
 
 </script>
 

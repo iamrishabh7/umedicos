@@ -16,11 +16,13 @@ class CreateDoctorsTable extends Migration
         Schema::create('doctors', function (Blueprint $table) {
             $table->increments('id');
             $table->integer('doctor_id');
-            $table->integer('profile_pic')->nullable();
+            $table->string('profile_pic')->nullable();
             $table->string('primary_contact');
             $table->string('secondary_contact')->nullable();
             $table->string('address1')->nullable();
+            $table->string('operational_days1')->nullable();
             $table->string('address2')->nullable();
+            $table->string('operational_days2')->nullable();
             $table->timestamps();
         });
     }

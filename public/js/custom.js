@@ -1,4 +1,12 @@
 $(document).ready(function() {
+	$('#searchDoctorForm').submit(function(event) {
+		if($('#pac_input').val() == ""){
+			swal('Warning','Please Enter Address','error');
+			return false; 
+		}else{
+			return true;
+		}
+	});
 	$('#loginForm').submit(function(event) {
 		event.preventDefault();
 		if($('#login_email').val() == ""){
@@ -65,6 +73,37 @@ $(document).ready(function() {
 					}
 				}
 			});
+		}
+	});
+	$('#doctorEditForm').submit(function(event) {
+		if($('#name').val() == ""){
+			swal('Warning','Please Enter Name','error');
+			return false; 
+		}else if($('#spacialization').val() == null){
+			swal('Warning','Please Select Specialization','error');
+			return false; 
+		}else if($('#profile_pic').val() == ""){
+			swal('Warning','Please Upload Profile Image','error');
+			return false; 
+		}else if($('#primary_contact').val() == ""){
+			swal('Warning','Please Enter Primary Contact Number','error');
+			return false; 
+		}else if($('#address1').val() == ""){
+			swal('Warning','Please Enter Address1','error');
+			return false; 
+		}else if($('#operational_days1').val() == null){
+			swal('Warning','Please Select operational days for Address 1','error');
+			return false; 
+		}else if($('#clinic_images').val() == ""){
+			swal('Warning','Please Select Clinic images','error');
+			return false; 
+		}else if($('#address2').val() != ""){
+			if($('#operational_days2').val() == null){
+				swal('Warning','Please Select operational days for Address 2','error');
+				return false; 
+			}
+		}else{
+			return true;
 		}
 	});
 });

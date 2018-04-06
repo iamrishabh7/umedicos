@@ -16,7 +16,12 @@ class DoctorController extends Controller
 {
 	public function getEditProfile(){
 		$data = array();
-		$data['user'] = User::find(Auth::user()->id)->with('doctor')->first();
+		$doc_specialization = array();
+		$data['user'] = $user = User::find(Auth::user()->id)->with('doctor','doctor_clinic','doctor_specialization')->first();
+		foreach($user->doctor_specialization as $doctor_specialization){
+			array_push($doc_specialization,$doctor_specialization->specialization_id);
+		}
+		$data['doc_specialization'] = $doc_specialization;
 		$data['specializations'] = Specialization::all();
 		return view('doctor.edit-profile',$data);
 	}
@@ -44,14 +49,27 @@ class DoctorController extends Controller
 			if($request->name){
 				$user->name = $request->name;
 			}
+			if($request->profile_pic){
+				$image = $request->file('profile_pic');
+				$filename = time().'.'.$image->getClientOriginalExtension();
+				$destinationPath = public_path('/images/doctors_images');
+				$image->move($destinationPath, $filename);
+				$doctor->profile_pic = url('/images/doctors_images').'/'.$filename;
+			}
 			if($request->primary_contact){
 				$doctor->primary_contact = $request->primary_contact;
 			}
 			if($request->address1){
 				$doctor->address1 = $request->address1;
 			}
+			if($request->operational_days1){
+				$doctor->operational_days1 = implode(',',$request->operational_days1);
+			}
 			if($request->address2){
 				$doctor->address2 = $request->address2;
+			}
+			if($request->operational_days2){
+				$doctor->operational_days2 = implode(',',$request->operational_days2);
 			}
 
 			if(count($request->spacialization) > 0){
@@ -63,7 +81,7 @@ class DoctorController extends Controller
 					$doctor_specialization->save();
 				}
 			}
-			if(count($request->clinic_images) > 1){
+			if(count($request->clinic_images) > 0){
 				DB::table('clinic_images')->where('clinic_id', $doctor_clinic->id)->delete(); 
 				for($i = 0; $i< count($request->clinic_images); $i++){
 					$image = $request->file('clinic_images')[$i];
@@ -73,14 +91,20 @@ class DoctorController extends Controller
 
 					$clinic_images = new ClinicImage();
 					$clinic_images->clinic_id = $doctor_clinic->id;
-					$clinic_images->image = $filename;
+					$clinic_images->image = url('/images/clinic_images').'/'.$filename;
 					$clinic_images->save();
 				}
 				$user->is_profile_completed = 1;
 			}
 			$user->save();
 			$doctor->save();
-			dd($request->all());
+			if($user->save()){
+				if($user->is_profile_completed){
+					return redirect('/doctor/profile');
+				}else{
+					return redirect('/doctor/profile/edit');
+				}
+			}
 		}
 	}
 }

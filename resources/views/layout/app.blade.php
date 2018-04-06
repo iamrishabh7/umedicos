@@ -20,6 +20,30 @@
 	@yield('style')
 
 	<body>
+		<nav class="navbar navbar-inverse "  role="navigation">
+			<div class="container-fluid">
+				<div class="navbar-header">
+					<button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-ex1-collapse">
+						<span class="sr-only">Toggle navigation</span>
+						<span class="icon-bar"></span>
+						<span class="icon-bar"></span>
+						<span class="icon-bar"></span>
+					</button>
+					<a class="navbar-brand" href="#">Title</a>
+				</div>
+
+				<div class="collapse navbar-collapse navbar-ex1-collapse">
+					<ul class="nav navbar-nav navbar-right">
+						@if(\Auth::check())
+						<li><a class="" data-toggle="modal" href="{{URL('/logout')}}">Logout</a></li>
+						@else
+						<li><a class="" data-toggle="modal" href='#loginModal'>Login</a></li>
+						@endif
+
+					</ul>
+				</div>
+			</div>
+		</nav>
 		@yield('content')
 
 		<!-- change password Modal -->
@@ -131,8 +155,11 @@
 				});
 
 				var input = document.getElementById('pac-input');
+				var input2 = document.getElementById('pac-input2');
 				var searchBox = new google.maps.places.SearchBox(input);
+				var searchBox2 = new google.maps.places.SearchBox(input2);
 				map.controls[google.maps.ControlPosition.TOP_LEFT].push(input);
+				map.controls[google.maps.ControlPosition.TOP_LEFT].push(input2);
 
 				map.addListener('bounds_changed', function() {
 					searchBox.setBounds(map.getBounds());

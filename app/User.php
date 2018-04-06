@@ -33,14 +33,10 @@ class User extends Authenticatable
     }   
     public function doctor_clinic()
     {
-        return $this->hasOne('\App\DoctorClinic');
-    }
-    public function doctor_address()
-    {
-        return $this->hasOne('\App\DoctorAddress');
+        return $this->hasOne('\App\DoctorClinic','doctor_id');
     }
     public function doctor_specialization()
     {
-        return $this->hasOne('\App\DoctorSpecialization');
+        return $this->hasMany('\App\DoctorSpecialization','doctor_id');
     }
 }
