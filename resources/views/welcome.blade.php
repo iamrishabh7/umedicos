@@ -16,7 +16,7 @@
 </div>
 
 
-<!-- Login / Register Modal-->
+<!-- Login Modal-->
 <div class="modal fade login-register-form" role="dialog" id="loginModal">
   <div class="modal-dialog modal-sm">
     <div class="modal-content">
@@ -26,29 +26,42 @@
         </button>
         <ul class="nav nav-tabs">
           <li class="active"><a data-toggle="tab" href="#login-form"> Login <span class="glyphicon glyphicon-user"></span></a></li>
-          <li><a data-toggle="tab" href="#registration-form"> Register <span class="glyphicon glyphicon-pencil"></span></a></li>
+        </ul>
+      </div>
+      <div class="modal-body">
+        <form action="{{URL('/login')}}"  id="loginForm">
+          {{csrf_field()}}
+          <div class="form-group">
+            <label for="login_email">Email:</label>
+            <input type="email" class="form-control" id="login_email" placeholder="Enter email" name="login_email">
+          </div>
+          <div class="form-group">
+            <label for="login_password">Password:</label>
+            <input type="password" class="form-control" id="login_password" placeholder="Enter password" name="login_password">
+          </div>
+          <button type="submit" class="btn btn-default">Login</button>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+<!-- Register Modal-->
+<div class="modal fade login-register-form" role="dialog" id="registerModal">
+  <div class="modal-dialog modal-sm">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal">
+          <span class="glyphicon glyphicon-remove"></span>
+        </button>
+        <ul class="nav nav-tabs">
+          <li class="active"><a data-toggle="tab" href="#registration-form"> Register <span class="glyphicon glyphicon-pencil"></span></a></li>
         </ul>
       </div>
       <div class="modal-body">
         <div class="tab-content">
-          <div id="login-form" class="tab-pane fade in active">
-            <form action="{{URL('/login')}}"  id="loginForm">
-              {{csrf_field()}}
-              <div class="form-group">
-                <label for="login_email">Email:</label>
-                <input type="email" class="form-control" id="login_email" placeholder="Enter email" name="login_email">
-              </div>
-              <div class="form-group">
-                <label for="login_password">Password:</label>
-                <input type="password" class="form-control" id="login_password" placeholder="Enter password" name="login_password">
-              </div>
-             <!--  <div class="checkbox">
-                <label><input type="checkbox" name="remember"> Remember me</label>
-              </div> -->
-              <button type="submit" class="btn btn-default">Login</button>
-            </form>
-          </div>
-          <div id="registration-form" class="tab-pane fade">
+          <div id="registration-form" class="tab-pane fade in active">
             <form action="{{URL('/register')}}"  id="registerForm">
               {{csrf_field()}}
               <div class="form-group">
@@ -79,11 +92,8 @@
 
         </div>
       </div>
-<!-- <div class="modal-footer">
-    <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-  </div> -->
-</div>
-</div>
+    </div>
+  </div>
 </div>
 
 

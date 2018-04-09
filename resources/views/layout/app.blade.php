@@ -38,6 +38,7 @@
 						<li><a class="" data-toggle="modal" href="{{URL('/logout')}}">Logout</a></li>
 						@else
 						<li><a class="" data-toggle="modal" href='#loginModal'>Login</a></li>
+						<li><a class="" data-toggle="modal" href='#registerModal'>Sign up</a></li>
 						@endif
 
 					</ul>
