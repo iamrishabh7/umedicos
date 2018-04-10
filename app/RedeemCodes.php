@@ -4,9 +4,9 @@ namespace App;
 
 use Illuminate\Database\Eloquent\Model;
 
-class Patient extends Model
+class RedeemCodes extends Model
 {
 	public function user(){
-		return $this->belongsTo('App\User','patient_id');
+		return $this->belongsTo('App\User');
 	}
 }

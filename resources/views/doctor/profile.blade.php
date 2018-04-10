@@ -193,8 +193,9 @@
 						</li>
 						<li>
 							<a href="#tab_default_4" data-toggle="tab">
-							Contact</a>
+							Redeem</a>
 						</li>
+						
 					</ul>
 					<div class="tab-content">
 						<div class="tab-pane active" id="tab_default_1">
@@ -303,99 +304,19 @@
 							</div>
 						</div>
 						<div class="tab-pane" id="tab_default_4">
-							<p>
-								Lifestyle
-
-							</p>
-							<div class="row">
-								<div class="col-sm-6">
-									<div class="form-group">
-										<label for="email">Highest Education:</label>
-										<p> MBA/PGDM</p>
-									</div>
-									<div class="form-group">
-										<label for="email">Place of Birth:</label>
-										<p> pune, maharashtra</p>
-									</div>
-									<div class="form-group">
-										<label for="email">Place of Birth:</label>
-										<p> pune, maharashtra</p>
-									</div>
-									<div class="form-group">
-										<label for="email">Place of Birth:</label>
-										<p> pune, maharashtra</p>
-									</div>
+							<form action="{{URL('/doctor/redeem-code')}}" method="POST" id="redeemCodeForm">
+								<div class="form-group">
+									<label for="">Redeem</label>
+									<input type="text" class="form-control" name="code" id="code" placeholder="Enter Code">
 								</div>
-								<div class="col-sm-6">
-									<div class="form-group">
-										<label for="email">Place of Birth:</label>
-										<p> pune, maharashtra</p>
-									</div>
-									<div class="form-group">
-										<label for="email">Place of Birth:</label>
-										<p> pune, maharashtra</p>
-									</div>
-									<div class="form-group">
-										<label for="email">Place of Birth:</label>
-										<p> pune, maharashtra</p>
-									</div>
-									<div class="form-group">
-										<label for="email">Place of Birth:</label>
-										<p> pune, maharashtra</p>
-									</div>
-
-								</div>
-							</div>
+								<button type="submit" class="btn btn-primary">Submit</button>
+							</form>
 						</div>
 					</div>
 				</div>
 			</div>
 
 		</div>
-		<div class="col-sm-4">
-			<div class="panel panel-default">
-				<div class="menu_title">
-					Horoscope
-				</div>
-				<div class="panel-body">
-					<div class="row">
-						<div class="col-lg-12">
-							<div class="form-group">
-								<label for="email">Place of Birth:</label>
-								<p> pune, maharashtra</p>
-							</div>
-							<div class="form-group">
-								<label for="email">Date of Birth:</label>
-								<p> 26 Sep 2017</p>
-							</div>
-							<div class="form-group">
-								<label for="email">Time of Birth:</label>
-								<p> 11:20 min.</p>
-							</div>
-							<div class="form-group">
-								<label for="email">Horroscoe Match not Necessory</label>
-							</div>
-							<div class="form-group">
-								<label for="email">Sun Sign:</label>
-								<p> Scorpio</p>
-							</div>
-							<div class="form-group">
-								<label for="email">Rashi/ Moon sign:</label>
-								<p> Mesh</p>
-							</div>
-							<div class="form-group">
-								<label for="email">Nakshtra:</label>
-								<p> Bharani</p>
-							</div>
-							<div class="form-group">
-								<label for="email">Manglik:</label>
-								<p> Manglik</p>
-							</div>
-							<button type="submit" class="btn btn-danger btn-block">Submit</button>
-						</div>
-					</div>
-				</div>
-			</div>
-		</div>
+		
 	</div>
 	@endsection

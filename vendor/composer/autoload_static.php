@@ -348,6 +348,7 @@ class ComposerStaticInitebd66453a5907303ddad6f10beb43c65
         'App\\Providers\\BroadcastServiceProvider' => __DIR__ . '/../..' . '/app/Providers/BroadcastServiceProvider.php',
         'App\\Providers\\EventServiceProvider' => __DIR__ . '/../..' . '/app/Providers/EventServiceProvider.php',
         'App\\Providers\\RouteServiceProvider' => __DIR__ . '/../..' . '/app/Providers/RouteServiceProvider.php',
+        'App\\RedeemCodes' => __DIR__ . '/../..' . '/app/RedeemCodes.php',
         'App\\Specialization' => __DIR__ . '/../..' . '/app/Specialization.php',
         'App\\User' => __DIR__ . '/../..' . '/app/User.php',
         'ArithmeticError' => __DIR__ . '/..' . '/symfony/polyfill-php70/Resources/stubs/ArithmeticError.php',

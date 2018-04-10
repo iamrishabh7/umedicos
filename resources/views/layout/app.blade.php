@@ -35,7 +35,15 @@
 				<div class="collapse navbar-collapse navbar-ex1-collapse">
 					<ul class="nav navbar-nav navbar-right">
 						@if(\Auth::check())
-						<li><a class="" data-toggle="modal" href="{{URL('/logout')}}">Logout</a></li>
+						<li>
+							<a class="" data-toggle="modal" href="{{\Auth::user()->role == 1 ? URL('/doctor/profile') : URL('/patient/profile')}}">Profile</a>
+						</li>
+						<li>
+							<a class="" data-toggle="modal" href="{{URL('/logout')}}">Logout</a>
+						</li>
+						<li>
+							<a class="" data-toggle="modal" href='#changePassModal'>change Password</a>
+						</li>
 						@else
 						<li><a class="" data-toggle="modal" href='#loginModal'>Login</a></li>
 						<li><a class="" data-toggle="modal" href='#registerModal'>Sign up</a></li>
@@ -47,8 +55,9 @@
 		</nav>
 		@yield('content')
 
+
 		<!-- change password Modal -->
-		<div class="modal fade empList-modal-lg changePassModal" id="myModal-change" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+		<div class="modal fade empList-modal-lg " id="changePassModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
 			<div class="modal-dialog">
 				<div class="modal-body">
 					<div class="panel panel-white">
@@ -117,18 +126,18 @@
 				var new_password = $('#new_password').val();
 				var confirm_password = $('#confirm_password').val();
 				if(old_password == ""){
-					swal('Oops',"Old Password Required",'warning');  
+					swal('Oops',"Old Password Required",'error');  
 				}else if(new_password == ""){
-					swal('Oops',"New Password Required",'warning');  
+					swal('Oops',"New Password Required",'error');  
 				}else if(confirm_password == ""){
-					swal('Oops',"Confirm Password Required",'warning');  
+					swal('Oops',"Confirm Password Required",'error');  
 				}else if(confirm_password !== new_password){
-					swal('Oops',"Confirm Password & New Password Not Matched ",'warning');  
+					swal('Oops',"Confirm Password & New Password Not Matched ",'error');  
 				}else{
 					$.ajaxSetup({
 						headers: {'X-CSRF-Token': $('meta[name=_token]').attr('content')}
 					});
-					var url  = "{{URL('/postChangePassword')}}";
+					var url  = "{{URL('/change-password')}}";
 					$.ajax({
 						url: url,
 						type: 'POST',
@@ -136,11 +145,11 @@
 						success: function (data) {
 							console.log(data);
 							if(data.flag){
-								$('.changePassModal').modal('toggle');
+								$('#changePassModal').modal('toggle');
 								swal('Success','Password Changed Successfully','success'); 
 							}else{
-								$('.changePassModal').modal('toggle');
-								swal('Oops',data.error,'warning');  
+								$('#changePassModal').modal('toggle');
+								swal('Oops',data.error,'error');  
 							}
 						}
 					});

@@ -7,6 +7,7 @@ use App\User;
 use App\Doctor;
 use App\DoctorClinic;
 use App\Patient;
+use App\RedeemCodes;
 use Auth;
 class AuthController extends Controller
 {
@@ -69,19 +70,115 @@ class AuthController extends Controller
 				}
 			}else{
 				$response['flag'] = true;
+				$user->is_profile_completed = 1;
+				$user->save();
 				if($user->is_profile_completed){
 					$response['next_url'] = url('/').'/patient/profile';
 				}else{
-					$response['next_url'] = url('/').'/patient/profile/edit';
+					$response['next_url'] = url('/').'/patient/profile';
 				}
 			}
 		}
 		else{
 			$response['flag'] = false;
-			$response['flag'] = "Invalid Login credentials";
+			$response['message'] = "Invalid Login credentials";
 		}
 		return response()->json($response);
 	}
+
+	public function postChangePassword(Request $request)
+	{
+		$response = array();
+		$user = \App\User::find(\Auth::user()->id);
+		$old_password = $request->old_password;
+		$new_password = $request->new_password;
+		if(\Hash::check($old_password, $user->getAuthPassword())){
+			$user->password = \Hash::make($new_password);
+			if($user->save()){
+				$response['flag'] = true;
+			}else{
+				$response['flag'] = false;
+				$response['error'] = "Something Went Wrong!";
+			}
+		}
+		else{
+			$response['flag'] = false;
+			$response['error'] = "Invalid Old Password";
+		}
+		return response()->json($response);
+	}
+
+	public function sendOtp(Request $request) {
+		$response = array();
+		$mobile_number = $request->mobile_number;
+		if ($mobile_number != "") {
+			$otp = generatePIN();
+			// $curl = curl_init();
+			// $message = "Welcome To DocApp, This is your mobile verification otp ".$otp;
+			// curl_setopt_array($curl, array(
+			// 	CURLOPT_URL => "http://api.msg91.com/api/sendhttp.php?sender=WTDOOR&route=4&mobiles=".$mobileNo."&authkey=132865Ays8sDtCdcz58446364&encrypt=1&country=91&message=".$message,
+			// 	CURLOPT_RETURNTRANSFER => true,
+			// 	CURLOPT_ENCODING => "",
+			// 	CURLOPT_MAXREDIRS => 10,
+			// 	CURLOPT_TIMEOUT => 30,
+			// 	CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
+			// 	CURLOPT_CUSTOMREQUEST => "GET",
+			// 	CURLOPT_SSL_VERIFYHOST => 0,
+			// 	CURLOPT_SSL_VERIFYPEER => 0,
+			// ));
+
+			// $response = curl_exec($curl);
+			// $err = curl_error($curl);
+			// curl_close($curl);
+			$user = User::where('id',Auth::user()->id)->first();
+			$user->otp = $otp;
+			if($user->save()){
+				$response['flag'] = true;	
+			}else{
+				$response['flag'] = false;	
+				$response['flag'] = "something went wrong";	
+			}
+		} else {
+			$response['flag'] = false;
+			$response['message'] = "Please Enter Mobile Number";
+		}
+		return response()->json($response);
+	}
+	public function verifyOtp(Request $request) {
+		$response = array();
+		if($request->otp !=""){
+			$pin = $request->otp;
+			$user = User::where('id',Auth::user()->id)->where('otp',$request->otp)->first();
+			if(!is_null($user)){
+				$user->is_mobile_verified = 1;
+				$user->otp = null;
+				if($user->save()){
+					$ifExist = \App\RedeemCodes::where('user_id',Auth::user()->id)->first();
+					if(!is_null($ifExist)){
+						$redeem_codes = new \App\RedeemCodes();
+						$name_array = explode(' ',$user->name);
+						$redeem_codes->code = strtoupper(substr($user->name,0,strlen($name_array[0])).randomstring(4));
+						$redeem_codes->user_id = $user->id;
+						$redeem_codes->save();
+					}
+					$response['flag'] = true;
+					$response['message'] = "Your Mobile Number Has Been Verified.";
+				}else{
+					$response['message'] = "Something went wrong";
+					$response['flag'] = false;
+				}
+			}else{
+				$response['message'] = "Your Verification Pin is Incorrect.";
+				$response['flag'] = false;
+			}
+		}else{
+			$response['message'] = "Your Verification Pin is Incorrect.";
+			$response['flag'] = false;
+		}
+		return response()->json($response);
+	}
+
+
 	public function logout()
 	{
 		Auth::logout();

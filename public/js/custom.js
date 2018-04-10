@@ -1,4 +1,6 @@
 $(document).ready(function() {
+
+
 	$('#searchDoctorForm').submit(function(event) {
 		if($('#pac_input').val() == ""){
 			swal('Warning','Please Enter Address','error');
@@ -7,6 +9,63 @@ $(document).ready(function() {
 			return true;
 		}
 	});
+
+	$('#sendOtpForm').submit(function(event) {
+		event.preventDefault();
+		if($('#mobile_number').val() == ""){
+			swal('Warning','Please Enter Mobile Number','error');
+			return false; 
+		}else{
+			$.ajaxSetup({
+				headers: {'X-CSRF-Token': $('meta[name=_token]').attr('content')}
+			});
+			var url  = $('#sendOtpForm').attr('action');
+			$.ajax({
+				url: url,
+				type: 'POST',
+				data: $('#sendOtpForm').serialize(),
+				success: function (data) {
+					console.log(data);
+					if(data.flag){
+						$('#sendOtpForm').hide();
+						$('#otpSentDiv').show();
+						$('#verifyOtpForm').show();
+					}else{
+						swal('Oops',data.message,'error');  
+					}
+				}
+			});
+		}
+	});
+
+	$('#verifyOtpForm').submit(function(event) {
+		event.preventDefault();
+		if($('#otp').val() == ""){
+			swal('Warning','Please Enter Mobile Number','error');
+			return false; 
+		}else{
+			$.ajaxSetup({
+				headers: {'X-CSRF-Token': $('meta[name=_token]').attr('content')}
+			});
+			var url  = $('#verifyOtpForm').attr('action');
+			$.ajax({
+				url: url,
+				type: 'POST',
+				data: $('#verifyOtpForm').serialize(),
+				success: function (data) {
+					console.log(data);
+					if(data.flag){
+						$('#verifyMobileModal').modal('toggle');
+						$('#alertDiv').remove();
+						swal('Success',data.message,'success');  
+					}else{
+						swal('Oops',data.message,'error');  
+					}
+				}
+			});
+		}
+	});
+
 	$('#loginForm').submit(function(event) {
 		event.preventDefault();
 		if($('#login_email').val() == ""){
@@ -65,10 +124,10 @@ $(document).ready(function() {
 				success: function (data) {
 					console.log(data);
 					if(data.flag){
-						$('.loginModal').modal('toggle');
+						$('#registerModal').modal('toggle');
 						swal('Success',data.message,'success');
 					}else{
-						$('.loginModal').modal('toggle');
+						$('#registerModal').modal('toggle');
 						swal('Oops',data.message,'error');  
 					}
 				}
@@ -104,6 +163,32 @@ $(document).ready(function() {
 			}
 		}else{
 			return true;
+		}
+	});
+
+	$('#redeemCodeForm').submit(function(event) {
+		event.preventDefault();
+		if($('#code').val() == ""){
+			swal('Warning','Please Enter Code','error');
+			return false; 
+		}else{
+			$.ajaxSetup({
+				headers: {'X-CSRF-Token': $('meta[name=_token]').attr('content')}
+			});
+			var url  = $('#redeemCodeForm').attr('action');
+			$.ajax({
+				url: url,
+				type: 'POST',
+				data: $('#redeemCodeForm').serialize(),
+				success: function (data) {
+					console.log(data);
+					if(data.flag){
+						swal('Success',data.message,'success');  
+					}else{
+						swal('Oops',data.message,'error');  
+					}
+				}
+			});
 		}
 	});
 });

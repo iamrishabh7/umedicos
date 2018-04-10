@@ -10,6 +10,7 @@ use App\ClinicImage;
 use App\DoctorSpecialization;
 use App\DoctorAddress;
 use App\Specialization;
+use App\RedeemCodes;
 use Auth;
 use DB;
 class DoctorController extends Controller
@@ -17,7 +18,7 @@ class DoctorController extends Controller
 	public function getEditProfile(){
 		$data = array();
 		$doc_specialization = array();
-		$data['user'] = $user = User::find(Auth::user()->id)->with('doctor','doctor_clinic','doctor_specialization')->first();
+		$data['user'] = $user = User::where('id',Auth::user()->id)->with('doctor','doctor_clinic','doctor_specialization')->first();
 		foreach($user->doctor_specialization as $doctor_specialization){
 			array_push($doc_specialization,$doctor_specialization->specialization_id);
 		}
@@ -43,7 +44,7 @@ class DoctorController extends Controller
 		}
 		else
 		{
-			$user = User::find(Auth::user()->id)->with('doctor')->first();
+			$user = User::where('id',Auth::user()->id)->with('doctor')->first();
 			$doctor = Doctor::where('doctor_id', Auth::user()->id)->first();
 			$doctor_clinic = DoctorClinic::where('doctor_id', Auth::user()->id)->first();
 			if($request->name){
@@ -106,5 +107,26 @@ class DoctorController extends Controller
 				}
 			}
 		}
+	}
+
+	public function redeemCode(Request $request)
+	{
+		$response = array();
+		$code = RedeemCodes::where('code',$request->code)->where('is_used',0)->first();
+		if(is_null($code)){
+			$response['flag'] = false;
+			$response['message'] = 'Code is either used or invalid';
+		}else{
+			$code->doctor_id = Auth::user()->id;
+			$code->is_used = 1;
+			if($code->save()){
+				$response['flag'] = true;
+				$response['message'] = 'Code Applied Successfully';
+			}else{
+				$response['flag'] = false;
+				$response['message'] = 'Something Went Wrong';
+			}
+		}
+		return response()->json($response);
 	}
 }
