@@ -199,107 +199,50 @@
 					</ul>
 					<div class="tab-content">
 						<div class="tab-pane active" id="tab_default_1">
-
+							<h4>Mobile </h4>
+							<p>{{$user->doctor->primary_contact}} , {{$user->doctor->secondary_contact}}</p>
+							<h4>Email</h4>
+							<p>{{$user->email}}</p>
+						</div>
+						<div class="tab-pane" id="tab_default_2">
 							<h4>Specialisation</h4>
 							<p>
 								@foreach($user->doctor_specialization as $doctor_specialization)
 								<span class="label label-success">{{getSpecializationById($doctor_specialization->specialization_id)->name}}</span>
 								@endforeach								
 							</p>
-							<h4>Education </h4>
-							<p>I have done PG in Human Resourses</p>
-							<h4>Occupation</h4>
-							<p>At present Working in Insurance sector</p>
-
-						</div>
-						<div class="tab-pane" id="tab_default_2">
-							<p>
-								Education& Career
-							</p>
-							<div class="row">
-								<div class="col-sm-6">
-									<div class="form-group">
-										<label for="email">Highest Education:</label>
-										<p> MBA/PGDM</p>
-									</div>
-									<div class="form-group">
-										<label for="email">Place of Birth:</label>
-										<p> pune, maharashtra</p>
-									</div>
-									<div class="form-group">
-										<label for="email">Place of Birth:</label>
-										<p> pune, maharashtra</p>
-									</div>
-									<div class="form-group">
-										<label for="email">Place of Birth:</label>
-										<p> pune, maharashtra</p>
-									</div>
-								</div>
-								<div class="col-sm-6">
-									<div class="form-group">
-										<label for="email">Place of Birth:</label>
-										<p> pune, maharashtra</p>
-									</div>
-									<div class="form-group">
-										<label for="email">Place of Birth:</label>
-										<p> pune, maharashtra</p>
-									</div>
-									<div class="form-group">
-										<label for="email">Place of Birth:</label>
-										<p> pune, maharashtra</p>
-									</div>
-									<div class="form-group">
-										<label for="email">Place of Birth:</label>
-										<p> pune, maharashtra</p>
-									</div>
-
-								</div>
-							</div>
-
-
-
 						</div>
 						<div class="tab-pane" id="tab_default_3">
-							<p>
-								Family Details
-							</p>
 							<div class="row">
 								<div class="col-sm-6">
 									<div class="form-group">
-										<label for="email">Highest Education:</label>
-										<p> MBA/PGDM</p>
+										<label for="email">Address 1</label>
+										<p>{{$user->doctor->address1}}</p>
 									</div>
 									<div class="form-group">
-										<label for="email">Place of Birth:</label>
-										<p> pune, maharashtra</p>
-									</div>
-									<div class="form-group">
-										<label for="email">Place of Birth:</label>
-										<p> pune, maharashtra</p>
-									</div>
-									<div class="form-group">
-										<label for="email">Place of Birth:</label>
-										<p> pune, maharashtra</p>
+										<label for="email">Operational Days</label>
+										<p>
+											<?php   $operational_days = explode(',',$user->doctor->operational_days1); ?>
+											@foreach($operational_days as $day)
+											{{$day}}
+											@endforeach
+										</p>
 									</div>
 								</div>
 								<div class="col-sm-6">
 									<div class="form-group">
-										<label for="email">Place of Birth:</label>
-										<p> pune, maharashtra</p>
+										<label for="email">Address 2</label>
+										<p>{{$user->doctor->address2}}</p>
 									</div>
 									<div class="form-group">
-										<label for="email">Place of Birth:</label>
-										<p> pune, maharashtra</p>
+										<label for="email">Operational Days</label>
+										<p>
+											<?php   $operational_days = explode(',',$user->doctor->operational_days2); ?>
+											@foreach($operational_days as $day)
+											{{$day}}
+											@endforeach
+										</p>
 									</div>
-									<div class="form-group">
-										<label for="email">Place of Birth:</label>
-										<p> pune, maharashtra</p>
-									</div>
-									<div class="form-group">
-										<label for="email">Place of Birth:</label>
-										<p> pune, maharashtra</p>
-									</div>
-
 								</div>
 							</div>
 						</div>

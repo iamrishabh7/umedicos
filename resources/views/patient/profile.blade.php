@@ -73,8 +73,15 @@
 			<div class="col-sm-12">
 				<div class="col-xs-12 col-sm-8">
 					<h2>{{$user->name}}</h2>
-					<p><strong>About: </strong> Web Designer / UI. </p>
-					<p><strong>Hobbies: </strong> Read, out with friends, listen to music, draw and learn new things. </p>
+					<p><strong>Mobile: </strong> {{$user->patient->primary_contact}} </p>
+					<p><strong>Email: </strong> {{$user->email}}</p>
+					<p><strong>Coupon Codes: </strong>
+						<ul class="list-group">
+							@foreach($user->redeem_codes as $redeem_code)
+							<li class="list-group-item">{{$redeem_code->code}} <span class="pull-right label label-{{ $redeem_code->is_used == "1" ? "warning":"success" }}">{{ $redeem_code->is_used == "1" ? "Used":"Free" }}</span></li>
+							@endforeach
+						</ul>
+					</p>
 				</div>             
 				<div class="col-xs-12 col-sm-4 text-center">
 					<figure>
@@ -87,7 +94,7 @@
 					<a href="{{URL('/')}}" class="btn btn-success btn-block"><span class="fa fa-search"></span>Seach Doctor</a>
 				</div>
 				<div class="col-xs-12 col-sm-6 emphasis">
-					<button class="btn btn-info btn-block"><span class="fa fa-user"></span> Edit Profile </button>
+					<a class="btn btn-info btn-block" href="{{URL('patient/profile/edit')}}"><span class="fa fa-user"></span> Edit Profile </a>
 				</div>
 				
 			</div>
@@ -109,6 +116,7 @@
 							</div>
 						</div>
 						<form action="{{URL('/send-otp')}}" method="POST" class="form-inline" role="form" id="sendOtpForm">
+							{{csrf_field()}}
 							<div class="form-group">
 								<label class="sr-only" for="">label</label>
 								<input type="text" value="{{$user->patient->primary_contact}}" class="form-control" id="mobile_number" name="mobile_number" placeholder="Mobile Number">
@@ -117,6 +125,7 @@
 						</form>
 
 						<form action="{{URL('/verify-otp')}}" method="POST" class="form-inline" role="form" id="verifyOtpForm" style="display: none;"> 
+							{{csrf_field()}}
 							<div class="form-group">
 								<label class="sr-only" for="">OTP</label>
 								<input type="text" class="form-control" id="otp" name="otp" placeholder="OTP">

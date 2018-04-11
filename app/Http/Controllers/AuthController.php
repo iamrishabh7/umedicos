@@ -116,7 +116,7 @@ class AuthController extends Controller
 			// $curl = curl_init();
 			// $message = "Welcome To DocApp, This is your mobile verification otp ".$otp;
 			// curl_setopt_array($curl, array(
-			// 	CURLOPT_URL => "http://api.msg91.com/api/sendhttp.php?sender=WTDOOR&route=4&mobiles=".$mobileNo."&authkey=132865Ays8sDtCdcz58446364&encrypt=1&country=91&message=".$message,
+			// 	CURLOPT_URL => "http://api.msg91.com/api/sendhttp.php?sender=WTDOOR&route=4&mobiles=".$request->mobile_number."&authkey=132865Ays8sDtCdcz58446364&encrypt=1&country=91&message=".$message,
 			// 	CURLOPT_RETURNTRANSFER => true,
 			// 	CURLOPT_ENCODING => "",
 			// 	CURLOPT_MAXREDIRS => 10,
@@ -127,7 +127,7 @@ class AuthController extends Controller
 			// 	CURLOPT_SSL_VERIFYPEER => 0,
 			// ));
 
-			// $response = curl_exec($curl);
+			// $curl_response = curl_exec($curl);
 			// $err = curl_error($curl);
 			// curl_close($curl);
 			$user = User::where('id',Auth::user()->id)->first();
@@ -153,14 +153,36 @@ class AuthController extends Controller
 				$user->is_mobile_verified = 1;
 				$user->otp = null;
 				if($user->save()){
+					$code_array = array();
 					$ifExist = \App\RedeemCodes::where('user_id',Auth::user()->id)->first();
-					if(!is_null($ifExist)){
-						$redeem_codes = new \App\RedeemCodes();
-						$name_array = explode(' ',$user->name);
-						$redeem_codes->code = strtoupper(substr($user->name,0,strlen($name_array[0])).randomstring(4));
-						$redeem_codes->user_id = $user->id;
-						$redeem_codes->save();
+					if(is_null($ifExist)){
+						for($i=0;$i<4;$i++){	
+							$redeem_codes = new \App\RedeemCodes();
+							$name_array = explode(' ',$user->name);
+							$redeem_codes->code = strtoupper(substr($user->name,0,strlen($name_array[0])).randomstring(4));
+							$redeem_codes->user_id = $user->id;
+							$redeem_codes->save();
+							array_push($code_array,$redeem_codes->code);
+						}
 					}
+					$codes = implode(',',$code_array);
+					$message = "Welcome To DocApp. Find you free coupon codes below: ".$codes;
+					// $curl = curl_init();
+					// curl_setopt_array($curl, array(
+					// 	CURLOPT_URL => "http://api.msg91.com/api/sendhttp.php?sender=WTDOOR&route=4&mobiles=".$user->patient->primary_contact."&authkey=132865Ays8sDtCdcz58446364&encrypt=1&country=91&message=".$message,
+					// 	CURLOPT_RETURNTRANSFER => true,
+					// 	CURLOPT_ENCODING => "",
+					// 	CURLOPT_MAXREDIRS => 10,
+					// 	CURLOPT_TIMEOUT => 30,
+					// 	CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
+					// 	CURLOPT_CUSTOMREQUEST => "GET",
+					// 	CURLOPT_SSL_VERIFYHOST => 0,
+					// 	CURLOPT_SSL_VERIFYPEER => 0,
+					// ));
+
+					// $curl_response = curl_exec($curl);
+					// $err = curl_error($curl);
+					// curl_close($curl);
 					$response['flag'] = true;
 					$response['message'] = "Your Mobile Number Has Been Verified.";
 				}else{

@@ -57,7 +57,8 @@ $(document).ready(function() {
 					if(data.flag){
 						$('#verifyMobileModal').modal('toggle');
 						$('#alertDiv').remove();
-						swal('Success',data.message,'success');  
+						swal('Success',data.message,'success'); 
+						setInterval(function(){ window.location.reload(); }, 2000);
 					}else{
 						swal('Oops',data.message,'error');  
 					}

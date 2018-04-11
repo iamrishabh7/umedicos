@@ -157,8 +157,8 @@ section .section-title {
 										<p><img class=" img-fluid" src="{{$doctor->profile_pic}}" alt="card image"></p>
 										<h4 class="card-title">{{$doctor->user->name}}</h4>
 										<p class="card-text">This is basic description of user.</p>
-										<a href="#" class="btn btn-primary btn-sm"><i class="fa fa-plus"></i></a>
 									</div>
+									
 								</div>
 							</div>
 							<div class="backside">
@@ -188,6 +188,7 @@ section .section-title {
 												</a>
 											</li>
 										</ul>
+										<a href="{{URL('/doctorID/'.$doctor->doctor_id)}}" class="btn btn-primary" style="color: white;">View profile</a>
 									</div>
 								</div>
 							</div>

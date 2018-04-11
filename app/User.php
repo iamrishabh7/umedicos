@@ -34,6 +34,10 @@ class User extends Authenticatable
     public function patient()
     {
         return $this->hasOne('\App\Patient','patient_id');
+    }  
+    public function redeem_codes()
+    {
+        return $this->hasMany('\App\RedeemCodes');
     }   
     public function doctor_clinic()
     {

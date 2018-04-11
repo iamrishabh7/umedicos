@@ -20,14 +20,24 @@ class HomeController extends Controller
 		}
 		return view('search-result',$data);
 	}
-	public function doctorPublieProfile()
+	public function doctorPublieProfile($id)
 	{
-		return view('profile');
+		$data = array();
+		$user =  User::where('id',$id)->where('is_profile_completed',1)->where('role',1)->with('doctor','doctor_clinic','doctor_specialization')->first();
+		if(is_null($user)){
+			$data['doctors'] = array();
+			return view('search-result',$data);
+		}else{
+			$data['user'] = $user;
+			$doctor_clinic = DoctorClinic::where('doctor_id', $id)->first();
+			$data['clinic_images'] = ClinicImage::where('clinic_id',$doctor_clinic->id)->get();
+			return view('profile',$data);
+		}
 	}
 	public function doctorProfile()
 	{
 		$data = array();
-		$data['user'] = User::find(Auth::user()->id)->with('doctor','doctor_clinic','doctor_specialization')->first();
+		$data['user'] = User::where('id',Auth::user()->id)->with('doctor','doctor_clinic','doctor_specialization')->first();
 		$doctor_clinic = DoctorClinic::where('doctor_id', Auth::user()->id)->first();
 		$data['clinic_images'] = ClinicImage::where('clinic_id',$doctor_clinic->id)->get();
 

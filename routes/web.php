@@ -24,4 +24,5 @@ Route::get('/doctor/profile/edit','DoctorController@getEditProfile');
 Route::post('/doctor/profile/edit','DoctorController@postEditProfile');
 Route::post('/doctor/redeem-code','DoctorController@redeemCode');
 Route::get('/patient/profile/edit','PatientController@getEditProfile');
+Route::post('/patient/profile/update','PatientController@postEditProfile');
 Route::get('/patient/profile','PatientController@getProfile');
