@@ -7,16 +7,42 @@ use App\User;
 use App\Doctor;
 use App\DoctorClinic;
 use App\ClinicImage;
+use App\DoctorSpecialization;
 use Auth;
 class HomeController extends Controller
 {
 	public function search(Request $request)
 	{
 		$data = array();
-		if(!isset($request->address) || $request->address == ""){
-			$data['doctors'] = array();	
+		if(!empty($request->address) && empty($request->specialization)){
+			$doctorsByAddess = Doctor::where('address1', 'like', '%' . $request->address . '%')->orWhere('address2', 'like', '%' . $request->address . '%')->with('user','clinic')->get();
+			$data['doctors'] = $doctorsByAddess;	
+		}
+		elseif(empty($request->address) && !empty($request->specialization)){
+			$doctorsByAddess= Doctor::where('address1', 'like', '%' . $request->address . '%')->orWhere('address2', 'like', '%' . $request->address . '%')->with('user','clinic')->get();
+			$doctors = array();
+			foreach ($doctorsByAddess as $user) {
+				$doctorsBySpecialization = DoctorSpecialization::where('doctor_id', $user->doctor_id)->where('specialization_id', $request->specialization)->first();
+				if(!is_null($doctorsBySpecialization)){
+					array_push($doctors,$user);
+				}
+			}
+			$data['doctors'] = $doctors;	
+		}elseif(!empty($request->address) && !empty($request->specialization)){
+			$doctorsByAddess= Doctor::where('address1', 'like', '%' . $request->address . '%')->orWhere('address2', 'like', '%' . $request->address . '%')->with('user','clinic')->get();
+			$doctors = array();
+			foreach ($doctorsByAddess as $user) {
+				$doctorsBySpecialization = DoctorSpecialization::where('doctor_id', $user->doctor_id)->where('specialization_id', $request->specialization)->first();
+				if(!is_null($doctorsBySpecialization)){
+					array_push($doctors,$user);
+				}else{
+					array_push($doctors,$user);	
+				}
+			}
+			$data['doctors'] = $doctors;	
 		}else{
-			$data['doctors'] = Doctor::where('address1', 'like', '%' . $request->address . '%')->orWhere('address2', 'like', '%' . $request->address . '%')->with('user','clinic')->get();
+			$data['doctors'] = array();	
+			
 		}
 		return view('search-result',$data);
 	}
@@ -40,7 +66,6 @@ class HomeController extends Controller
 		$data['user'] = User::where('id',Auth::user()->id)->with('doctor','doctor_clinic','doctor_specialization')->first();
 		$doctor_clinic = DoctorClinic::where('doctor_id', Auth::user()->id)->first();
 		$data['clinic_images'] = ClinicImage::where('clinic_id',$doctor_clinic->id)->get();
-
 		return view('doctor.profile',$data);
 	}
 

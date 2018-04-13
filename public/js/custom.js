@@ -184,7 +184,8 @@ $(document).ready(function() {
 				success: function (data) {
 					console.log(data);
 					if(data.flag){
-						swal('Success',data.message,'success');  
+						swal('Success',data.message,'success'); 
+						setInterval(function(){ window.location.reload(); }, 2000);
 					}else{
 						swal('Oops',data.message,'error');  
 					}

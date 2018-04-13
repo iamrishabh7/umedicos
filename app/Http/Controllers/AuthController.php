@@ -8,12 +8,15 @@ use App\Doctor;
 use App\DoctorClinic;
 use App\Patient;
 use App\RedeemCodes;
+use App\Specialization;
 use Auth;
 class AuthController extends Controller
 {
 	public function index()
 	{
-		return view('welcome');
+		$data = array();
+		$data['specializations'] = Specialization::all();
+		return view('welcome',$data);
 	}
 	public function register(Request $request)
 	{
@@ -113,23 +116,23 @@ class AuthController extends Controller
 		$mobile_number = $request->mobile_number;
 		if ($mobile_number != "") {
 			$otp = generatePIN();
-			// $curl = curl_init();
-			// $message = "Welcome To DocApp, This is your mobile verification otp ".$otp;
-			// curl_setopt_array($curl, array(
-			// 	CURLOPT_URL => "http://api.msg91.com/api/sendhttp.php?sender=WTDOOR&route=4&mobiles=".$request->mobile_number."&authkey=132865Ays8sDtCdcz58446364&encrypt=1&country=91&message=".$message,
-			// 	CURLOPT_RETURNTRANSFER => true,
-			// 	CURLOPT_ENCODING => "",
-			// 	CURLOPT_MAXREDIRS => 10,
-			// 	CURLOPT_TIMEOUT => 30,
-			// 	CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
-			// 	CURLOPT_CUSTOMREQUEST => "GET",
-			// 	CURLOPT_SSL_VERIFYHOST => 0,
-			// 	CURLOPT_SSL_VERIFYPEER => 0,
-			// ));
+			$curl = curl_init();
+			$message = "Welcome To DocApp, This is your mobile verification otp ".$otp;
+			curl_setopt_array($curl, array(
+				CURLOPT_URL => "http://api.msg91.com/api/sendhttp.php?sender=DOCAPP&route=4&mobiles=".$request->mobile_number."&authkey=209391AfYJrs2oH5acd846e&encrypt=1&country=91&message=".$message,
+				CURLOPT_RETURNTRANSFER => true,
+				CURLOPT_ENCODING => "",
+				CURLOPT_MAXREDIRS => 10,
+				CURLOPT_TIMEOUT => 30,
+				CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
+				CURLOPT_CUSTOMREQUEST => "GET",
+				CURLOPT_SSL_VERIFYHOST => 0,
+				CURLOPT_SSL_VERIFYPEER => 0,
+			));
 
-			// $curl_response = curl_exec($curl);
-			// $err = curl_error($curl);
-			// curl_close($curl);
+			$curl_response = curl_exec($curl);
+			$err = curl_error($curl);
+			curl_close($curl);
 			$user = User::where('id',Auth::user()->id)->first();
 			$user->otp = $otp;
 			if($user->save()){
@@ -154,8 +157,8 @@ class AuthController extends Controller
 				$user->otp = null;
 				if($user->save()){
 					$code_array = array();
-					$ifExist = \App\RedeemCodes::where('user_id',Auth::user()->id)->first();
-					if(is_null($ifExist)){
+					$ifExist = \App\RedeemCodes::where('user_id',Auth::user()->id)->get();
+					if(count($ifExist) == 0){
 						for($i=0;$i<4;$i++){	
 							$redeem_codes = new \App\RedeemCodes();
 							$name_array = explode(' ',$user->name);
@@ -164,25 +167,25 @@ class AuthController extends Controller
 							$redeem_codes->save();
 							array_push($code_array,$redeem_codes->code);
 						}
-					}
-					$codes = implode(',',$code_array);
-					$message = "Welcome To DocApp. Find you free coupon codes below: ".$codes;
-					// $curl = curl_init();
-					// curl_setopt_array($curl, array(
-					// 	CURLOPT_URL => "http://api.msg91.com/api/sendhttp.php?sender=WTDOOR&route=4&mobiles=".$user->patient->primary_contact."&authkey=132865Ays8sDtCdcz58446364&encrypt=1&country=91&message=".$message,
-					// 	CURLOPT_RETURNTRANSFER => true,
-					// 	CURLOPT_ENCODING => "",
-					// 	CURLOPT_MAXREDIRS => 10,
-					// 	CURLOPT_TIMEOUT => 30,
-					// 	CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
-					// 	CURLOPT_CUSTOMREQUEST => "GET",
-					// 	CURLOPT_SSL_VERIFYHOST => 0,
-					// 	CURLOPT_SSL_VERIFYPEER => 0,
-					// ));
+						$codes = implode(',',$code_array);
+						$message = "Welcome To DocApp. Find you free coupon codes below: ".$codes;
+						$curl = curl_init();
+						curl_setopt_array($curl, array(
+							CURLOPT_URL => "http://api.msg91.com/api/sendhttp.php?sender=DOCAPP&route=4&mobiles=".$user->patient->primary_contact."&authkey=209391AfYJrs2oH5acd846e&encrypt=1&country=91&message=".$message,
+							CURLOPT_RETURNTRANSFER => true,
+							CURLOPT_ENCODING => "",
+							CURLOPT_MAXREDIRS => 10,
+							CURLOPT_TIMEOUT => 30,
+							CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
+							CURLOPT_CUSTOMREQUEST => "GET",
+							CURLOPT_SSL_VERIFYHOST => 0,
+							CURLOPT_SSL_VERIFYPEER => 0,
+						));
 
-					// $curl_response = curl_exec($curl);
-					// $err = curl_error($curl);
-					// curl_close($curl);
+						$curl_response = curl_exec($curl);
+						$err = curl_error($curl);
+						curl_close($curl);
+					}
 					$response['flag'] = true;
 					$response['message'] = "Your Mobile Number Has Been Verified.";
 				}else{

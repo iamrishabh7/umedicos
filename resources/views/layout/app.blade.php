@@ -107,12 +107,14 @@
 		{{ Html::script("assets/plugins/jquery-blockui/jquery.blockui.js") }}
 		{{ Html::script("assets/plugins/bootstrap/js/bootstrap.min.js") }}
 		{{ Html::script("assets/plugins/jquery-slimscroll/jquery.slimscroll.min.js") }}
+		{{ Html::script("assets/plugins/bootstrap-timepicker/js/bootstrap-timepicker.min.js") }}
 		{{ Html::script("js/sweetalert2.min.js") }}
 		{{ Html::script("js/custom.js") }}
 		{{ Html::script("js/select2.min.js") }}
 		<script>
 			$( function() {
 				$('.select2').select2();
+				$('.timepicker').timepicker();
 				$('.multi_select2').select2();
 				$( ".datepicker" ).datepicker();
 				$( "#datatable" ).DataTable({

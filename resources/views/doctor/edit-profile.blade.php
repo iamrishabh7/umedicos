@@ -84,6 +84,15 @@
 						</div>
 
 						<div class="form-group">
+							<label class="col-sm-2 control-label">Address 1 Timimg</label>
+							<div class="col-sm-10">
+								<input type="text" id="" name="address1_timing" class="timepicker form-control" value="{{$user->doctor->address1_timing}}">
+							</div>
+						</div>
+
+
+
+						<div class="form-group">
 							<label class="col-sm-2 control-label">Address 2 </label>
 							<div class="col-sm-10">
 								<input type="text" id="pac-input2" name="address2" class="form-control" value="{{$user->doctor->address2}}">
@@ -103,6 +112,12 @@
 									<option value="Saturday" {{in_array('Saturday',$operational_days2) ? "selected":""}}>Saturday</option>
 									<option value="Sunday" {{in_array('Sunday',$operational_days2) ? "selected":""}}>Sunday</option>
 								</select>
+							</div>
+						</div>
+						<div class="form-group">
+							<label class="col-sm-2 control-label">Address 2 Timimg</label>
+							<div class="col-sm-10">
+								<input type="text" id="" name="address2_timing" class="timepicker form-control" value="{{$user->doctor->address2_timing}}">
 							</div>
 						</div>
 						<div class="form-group">

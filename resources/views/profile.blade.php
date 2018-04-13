@@ -223,6 +223,11 @@
 											@endforeach
 										</p>
 									</div>
+
+									<div class="form-group">
+										<label for="email">Timing</label>
+										<p>{{$user->doctor->address1_timing}}</p>
+									</div>
 								</div>
 								<div class="col-sm-6">
 									<div class="form-group">
@@ -237,6 +242,11 @@
 											{{$day}}
 											@endforeach
 										</p>
+									</div>
+									
+									<div class="form-group">
+										<label for="email">Timing</label>
+										<p>{{$user->doctor->address2_timing}}</p>
 									</div>
 								</div>
 							</div>

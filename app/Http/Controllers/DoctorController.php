@@ -60,6 +60,12 @@ class DoctorController extends Controller
 			if($request->primary_contact){
 				$doctor->primary_contact = $request->primary_contact;
 			}
+			if($request->address1_timing){
+				$doctor->address1_timing = $request->address1_timing;
+			}
+			if($request->address2_timing){
+				$doctor->address2_timing = $request->address2_timing;
+			}
 			if($request->address1){
 				$doctor->address1 = $request->address1;
 			}
@@ -86,7 +92,7 @@ class DoctorController extends Controller
 				DB::table('clinic_images')->where('clinic_id', $doctor_clinic->id)->delete(); 
 				for($i = 0; $i< count($request->clinic_images); $i++){
 					$image = $request->file('clinic_images')[$i];
-					$filename = time().'.'.$image->getClientOriginalExtension();
+					$filename = time().rand().'.'.$image->getClientOriginalExtension();
 					$destinationPath = public_path('/images/clinic_images');
 					$image->move($destinationPath, $filename);
 

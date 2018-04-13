@@ -10,6 +10,6 @@ class Doctor extends Model
 		return $this->belongsTo('App\User','doctor_id');
 	}
 	public function clinic(){
-		return $this->hasOne('App\DoctorClinic','doctor_id');
+		return $this->hasOne('App\DoctorClinic','doctor_id','doctor_id');
 	}
 }
