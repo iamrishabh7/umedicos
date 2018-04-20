@@ -1,5 +1,5 @@
 <?php 
-function getUserById($spacialization){
+function getUserById($user_id){
 	$user = \App\User::find($user_id);
 	return $user;
 }

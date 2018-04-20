@@ -8,6 +8,8 @@ use App\Doctor;
 use App\DoctorClinic;
 use App\ClinicImage;
 use App\DoctorSpecialization;
+use App\OperationalDay;
+use App\RedeemCodes;
 use Auth;
 class HomeController extends Controller
 {
@@ -46,7 +48,7 @@ class HomeController extends Controller
 		}
 		return view('search-result',$data);
 	}
-	public function doctorPublieProfile($id)
+	public function doctorPublicProfile($id)
 	{
 		$data = array();
 		$user =  User::where('id',$id)->where('is_profile_completed',1)->where('role',1)->with('doctor','doctor_clinic','doctor_specialization')->first();
@@ -57,6 +59,11 @@ class HomeController extends Controller
 			$data['user'] = $user;
 			$doctor_clinic = DoctorClinic::where('doctor_id', $id)->first();
 			$data['clinic_images'] = ClinicImage::where('clinic_id',$doctor_clinic->id)->get();
+			$data['operational_days1'] = OperationalDay::where('doctor_id', $id)->where('day_type',1)->get();
+			$data['operational_days2'] = OperationalDay::where('doctor_id', $id)->where('day_type',2)->get();
+			$data['clinic_images'] = ClinicImage::where('clinic_id',$doctor_clinic->id)->get();
+			$data['redeemed_patients'] = RedeemCodes::where('doctor_id', $id)->get();
+			$data['doctor_clinic'] = $doctor_clinic;
 			return view('profile',$data);
 		}
 	}
@@ -65,7 +72,11 @@ class HomeController extends Controller
 		$data = array();
 		$data['user'] = User::where('id',Auth::user()->id)->with('doctor','doctor_clinic','doctor_specialization')->first();
 		$doctor_clinic = DoctorClinic::where('doctor_id', Auth::user()->id)->first();
+		$data['operational_days1'] = OperationalDay::where('doctor_id', Auth::user()->id)->where('day_type',1)->get();
+		$data['operational_days2'] = OperationalDay::where('doctor_id', Auth::user()->id)->where('day_type',2)->get();
 		$data['clinic_images'] = ClinicImage::where('clinic_id',$doctor_clinic->id)->get();
+		$data['redeemed_patients'] = RedeemCodes::where('doctor_id', Auth::user()->id)->get();
+		$data['doctor_clinic'] = $doctor_clinic;
 		return view('doctor.profile',$data);
 	}
 

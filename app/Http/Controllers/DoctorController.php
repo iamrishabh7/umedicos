@@ -11,6 +11,7 @@ use App\DoctorSpecialization;
 use App\DoctorAddress;
 use App\Specialization;
 use App\RedeemCodes;
+use App\OperationalDay;
 use Auth;
 use DB;
 class DoctorController extends Controller
@@ -24,6 +25,10 @@ class DoctorController extends Controller
 		}
 		$data['doc_specialization'] = $doc_specialization;
 		$data['specializations'] = Specialization::all();
+		$doctor_clinic = DoctorClinic::where('doctor_id', Auth::user()->id)->first();
+		$data['clinic_images'] = ClinicImage::where('clinic_id',$doctor_clinic->id)->get();
+		$data['operational_days1'] = OperationalDay::where('doctor_id', Auth::user()->id)->where('day_type',1)->get();
+		$data['operational_days2'] = OperationalDay::where('doctor_id', Auth::user()->id)->where('day_type',2)->get();
 		return view('doctor.edit-profile',$data);
 	}
 	public function postEditProfile(Request $request)
@@ -31,9 +36,6 @@ class DoctorController extends Controller
 		$validator = \Validator::make($request->all(),
 			array(
 				'name' =>'required',
-				'profile_pic' =>'required|image',
-				'primary_contact' =>'required',
-				'address1' =>'required',
 			)
 		);
 		if($validator->fails())
@@ -57,26 +59,21 @@ class DoctorController extends Controller
 				$image->move($destinationPath, $filename);
 				$doctor->profile_pic = url('/images/doctors_images').'/'.$filename;
 			}
+			if($request->clinic_name){
+				$doctor_clinic = DoctorClinic::where('doctor_id',\Auth::user()->id)->first();
+				$doctor_clinic->name = $request->clinic_name;
+				$doctor_clinic->save();
+			}
 			if($request->primary_contact){
 				$doctor->primary_contact = $request->primary_contact;
 			}
-			if($request->address1_timing){
-				$doctor->address1_timing = $request->address1_timing;
-			}
-			if($request->address2_timing){
-				$doctor->address2_timing = $request->address2_timing;
-			}
+			
 			if($request->address1){
 				$doctor->address1 = $request->address1;
 			}
-			if($request->operational_days1){
-				$doctor->operational_days1 = implode(',',$request->operational_days1);
-			}
+			
 			if($request->address2){
 				$doctor->address2 = $request->address2;
-			}
-			if($request->operational_days2){
-				$doctor->operational_days2 = implode(',',$request->operational_days2);
 			}
 
 			if(count($request->spacialization) > 0){
@@ -88,6 +85,30 @@ class DoctorController extends Controller
 					$doctor_specialization->save();
 				}
 			}
+
+			if(count($request->operational_days1)) {
+				for ($i=0; $i < count($request->operational_days1) ; $i++) { 
+					$operational_days = new OperationalDay();
+					$operational_days->doctor_id = $user->id;
+					$operational_days->day_type = 1;
+					$operational_days->day = $request->operational_days1[$i];
+					$operational_days->from_time = $request->address1_timing_from[$i];
+					$operational_days->to_time = $request->address1_timing_to[$i];
+					$operational_days->save();
+				}
+			}
+			if(count($request->operational_days2) > 0 && $request->operational_days2[0] != null) {
+				for ($i=0; $i < count($request->operational_days2) ; $i++) { 
+					$operational_days = new OperationalDay();
+					$operational_days->doctor_id = $user->id;
+					$operational_days->day_type = 2;
+					$operational_days->day = $request->operational_days2[$i];
+					$operational_days->from_time = $request->address2_timing_from[$i];
+					$operational_days->to_time = $request->address2_timing_to[$i];
+					$operational_days->save();
+				}
+			}
+
 			if(count($request->clinic_images) > 0){
 				DB::table('clinic_images')->where('clinic_id', $doctor_clinic->id)->delete(); 
 				for($i = 0; $i< count($request->clinic_images); $i++){

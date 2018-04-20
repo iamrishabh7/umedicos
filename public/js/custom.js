@@ -1,5 +1,30 @@
+function addDay(day){
+	var html = `
+	<label class="col-sm-3"></label>
+	<div class="col-sm-3">
+	<select name="operational_days`+day+`[]" id="operational_days`+day+`" class="form-control">
+	<option value="">--Select Day--</option>
+	<option value="Monday">Monday</option>
+	<option value="Tuesday">Tuesday</option>
+	<option value="Wednesday">Wednesday</option>
+	<option value="Thusrday">Thusrday</option>
+	<option value="Friday">Friday</option>
+	<option value="Saturday">Saturday</option>
+	<option value="Sunday">Sunday</option>
+	</select>
+	</div>
+	<div class="col-sm-2">
+	<input type="time" name="address`+day+`_timing_from[]" class="form-control" placeholder="time From">
+	</div>	
+	<div class="col-sm-2">
+	<input type="time" name="address`+day+`_timing_to[]" class="form-control" placeholder="time to">
+	</div>
+	<div class="col-sm-2">
+	</div>
+	`;
+	$('#days'+day).append(html);
+}
 $(document).ready(function() {
-
 
 	$('#searchDoctorForm').submit(function(event) {
 		if($('#pac_input').val() == ""){

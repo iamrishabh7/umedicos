@@ -1,135 +1,32 @@
 	@extends('layout.app')
 	@section('content')
 	@section('title','Profile')
-	<style>
-	#header {
-		border: 1px solid #ddd;
-		margin-bottom: 20px;
+
+	<style type="text/css">
+	footer
+	{
+		position: relative !important;
 	}
 
-	.navbar {
-		border-radius: 0;
-		margin-bottom: 0;
-		border: none;
-		font-family: 'Open Sans Condensed', sans-serif, sans-serif;
+	.text-bold
+	{font-weight: bold;
+		color: #20248a;
 	}
 
-	.navbar > li >a {}
+	th, td {
+		text-align: left;
+		padding: 30px;
 
-	.navbar-header {}
-
-	.profile_pic {
-		width: 160px;
-		height: 160px;
-		float: left;
-		padding: 0;
-		margin-top: -130px;
-		overflow: hidden;
-		border: 3px solid #eee;
-		margin-left: 15px;
-		background: #333;
-		text-align: center;
-		line-height: 160px;
-		color: #fff !important;
-		font-size: 2em;
-		-webkit-transition: all 0.3s ease-in-out;
-		-moz-transition: all 0.3s ease-in-out;
-		-o-transition: all 0.3s ease-in-out;
-		transition: all 0.3s ease-in-out;
 	}
 
-	.site-name {
-		color: #fff;
-		font-size: 2.4em;
-		float: left;
-		margin-top: -75px !important;
-		margin-left: 15px;
-		font-family: 'Open Sans Condensed', sans-serif, sans-serif;
+	tr:nth-child(even){background-color: #f2f2f2;}
+	.padd-30
+	{
+		padding-top: 30px;
 	}
 
-	.site-description {
-		color: #fff;
-		font-size: 1.3em;
-		float: left;
-		margin-top: -30px !important;
-		margin-left: 15px;
-	}
-
-	.main-menu {
-		position: absolute;
-		left: 190px;
-	}
-
-	.slider,
-	.carousel {
-		max-height: 360px;
-		overflow: hidden;
-	}
-
-	.carousel-control .fa-angle-left,
-	.carousel-control .fa-angle-right {
-		position: absolute;
-		top: 50%;
-		font-size: 2em;
-		z-index: 5;
-		display: inline-block;
-	}
-
-	.carousel-control {
-		background-color: transparent;
-		background-image: none !important;
-	}
-
-	.carousel-control:hover,
-	.carousel-control:focus {
-		color: #fff;
-		text-decoration: none;
-		background-color: transparent !important;
-		background-image: none !important;
-		outline: 0;
-	}
-
-	@media (max-width: 768px) {
-		.profile_pic {
-			max-width: 100px;
-			max-height: 100px;
-			float: left;
-			margin-top: -65px;
-			margin-left: 15px;
-			-webkit-transition: all 0.3s ease-in-out;
-			-moz-transition: all 0.3s ease-in-out;
-			-o-transition: all 0.3s ease-in-out;
-			transition: all 0.3s ease-in-out;
-		}
-		.navbar {
-			border-radius: 0;
-			margin-bottom: 0;
-			border: none;
-		}
-		.main-menu {
-			left: 0;
-			position: relative;
-		}
-	}
-
-	@media (max-width: 490px) {
-		.site-name {
-			color: #fff;
-			font-size: 1.5em;
-			float: left;
-			line-height: 20px;
-			margin-top: -100px !important;
-			margin-left: 125px;
-		}
-		.site-description {
-			color: #fff;
-			font-size: 1.3em;
-			float: left;
-			margin-top: -80px !important;
-			margin-left: 125px;
-		}
-	}
 </style>
+
 <header id="header">
 	<div class="slider">
 		<div id="carousel-example-generic" class="carousel slide" data-ride="carousel">
@@ -137,7 +34,7 @@
 				<?php $i = 0; ?>
 				@foreach($clinic_images as $clinic_image)
 				<div class="item {{$i == 0 ? 'active':''}}">
-					<img src="{{$clinic_image->image}}">
+					<img src="{{$clinic_image->image}}" width="100%" height="360" style="object-fit: cover; height: 360px;">
 				</div>
 				<?php $i++; ?>
 				@endforeach
@@ -162,114 +59,161 @@
 				<span class="icon-bar"></span>
 			</button>
 			<a class="profile_pic" href="#"><img class="img-responsive" src="{{$user->doctor->profile_pic}}"></a>
-			<span class="site-name"><b>{{$user->name}}</span>
-			</div>
-			<div class="collapse navbar-collapse" id="mainNav">
-				<ul class="nav  navbar-nav">
-					<li><a href="#"><i class="fa fa-facebook"></i></a></li>
-					<li><a href="#"><i class="fa fa-twitter"></i></a></li>
-					<li><a href="#"><i class="fa fa-google-plus"></i></a></li>
-				</ul>
-			</div>
-		</nav>
-	</header>  
+			<span class="site-name">{{$user->name}}</span>
+		</div>
+
+	</nav>
+</header>
+
+<div class="clearfix"></div>
+<section style="margin-bottom: 100px; margin-top: 100px;" > 
 	<div class="container">
-		<div class="col-sm-8">
+		<div class="row">
+			<div class="col-md-8 col-md-offset-2">
+				<div class="panel panel-default color-text">
+					<div class="panel-heading">Profile Details</div>
+					<div class="panel-body">
+						<ul class="nav nav-tabs">
+							<li class="active"><a href="#tab_default_1" data-toggle="tab">About </a></li>
+							<li><a href="#tab_default_3" data-toggle="tab">Clinic Details</a></li>
+							<li><a href="#tab_default_4" data-toggle="tab">Redeem Coupon</a></li>
+							<li><a href="#tab_default_5" data-toggle="tab">Redeem</a></li>
+						</ul>
 
-			<div data-spy="scroll" class="tabbable-panel">
-				<div class="tabbable-line">
-					<ul class="nav nav-tabs ">
-						<li class="active">
-							<a href="#tab_default_1" data-toggle="tab">
-							About </a>
-						</li>
-						<li>
-							<a href="#tab_default_2" data-toggle="tab">
-							Clinic Details</a>
-						</li>
-						<li>
-							<a href="#tab_default_3" data-toggle="tab">
-							Operational Days</a>
-						</li>
-						<li>
-							<a href="#tab_default_4" data-toggle="tab">
-							Redeem</a>
-						</li>
-						
-					</ul>
-					<div class="tab-content">
-						<div class="tab-pane active" id="tab_default_1">
-							<h4>Mobile </h4>
-							<p>{{$user->doctor->primary_contact}} , {{$user->doctor->secondary_contact}}</p>
-							<h4>Email</h4>
-							<p>{{$user->email}}</p>
-						</div>
-						<div class="tab-pane" id="tab_default_2">
-							<h4>Specialisation</h4>
-							<p>
-								@foreach($user->doctor_specialization as $doctor_specialization)
-								<span class="label label-success">{{getSpecializationById($doctor_specialization->specialization_id)->name}}</span>
-								@endforeach								
-							</p>
-						</div>
-						<div class="tab-pane" id="tab_default_3">
-							<div class="row">
-								<div class="col-sm-6">
-									<div class="form-group">
-										<label for="email">Address 1</label>
-										<p>{{$user->doctor->address1}}</p>
-									</div>
-									<div class="form-group">
-										<label for="email">Operational Days</label>
-										<p>
-											<?php   $operational_days = explode(',',$user->doctor->operational_days1); ?>
-											@foreach($operational_days as $day)
-											{{$day}}
-											@endforeach
-										</p>
-									</div>
-									<div class="form-group">
-										<label for="email">Timing</label>
-										<p>{{$user->doctor->address1_timing}}</p>
-									</div>
+						<div class="tab-content">
+
+							<div class="tab-pane fade in active" id="tab_default_1">
+								<table class="table table-responsive">
+
+									<tbody>
+
+										<tr>
+											<td class="text-bold">Name</td>
+											<td>{{$user->name}}</td>
+										</tr>
+										<tr>
+											<td class="text-bold">Email</td>
+											<td>{{$user->email}}</td>
+										</tr>
+										<tr>
+											<td class="text-bold">Mobile</td>
+											<td>{{$user->doctor->primary_contact}} , {{$user->doctor->secondary_contact}}</td>
+										</tr>
+
+										<tr>
+											<td class="text-bold">Specialisation</td>
+											<td>@foreach($user->doctor_specialization as $doctor_specialization)
+												<span class="special-label">{{getSpecializationById($doctor_specialization->specialization_id)->name}}</span>@endforeach</td>
+											</tr>
+
+										</tbody>
+									</table>
 								</div>
-								<div class="col-sm-6">
-									<div class="form-group">
-										<label for="email">Address 2</label>
-										<p>{{$user->doctor->address2}}</p>
-									</div>
-									<div class="form-group">
-										<label for="email">Operational Days</label>
-										<p>
-											<?php   $operational_days = explode(',',$user->doctor->operational_days2); ?>
-											@foreach($operational_days as $day)
-											{{$day}}
-											@endforeach
-										</p>
-									</div>
 
-									<div class="form-group">
-										<label for="email">Timing</label>
-										<p>{{$user->doctor->address2_timing}}</p>
+								<div class="tab-pane fade" id="tab_default_3">
+									<table class="table table-responsive">
+										<tbody>
+											<tr>
+												<td class="text-bold">Clinic</td>
+												<td>{{$doctor_clinic->name}}</td>
+											</tr>
+											<tr>
+												<td class="text-bold">Address 1</td>
+												<td>{{$user->doctor->address1}}</td>
+											</tr>
+
+										</tbody>
+									</table>
+									<p class="text-bold">Operational Days 1</p>
+									<table class="table table-responsive">
+										<thead>
+											<tr>
+												<th class="text-bold">Days</th>
+												<th class="text-bold">Timing Morning </th>
+												<th class="text-bold">Evening Timing</th>
+											</tr>
+										</thead>
+										<tbody>
+											@foreach($operational_days1 as $operational_day1)
+											<tr>
+												<td>{{$operational_day1->day}}</td>
+												<td>{{$operational_day1->from_time}}</td>
+												<td>{{$operational_day1->to_time}}</td>
+											</tr>
+											@endforeach
+
+
+										</tbody>
+									</table>
+									<p class="text-bold">Operational Days 2</p>
+									<table class="table table-responsive">
+										<thead>
+											<tr>
+												<th class="text-bold">Days</th>
+												<th class="text-bold">Timing Morning </th>
+												<th class="text-bold">Evening Timing</th>
+											</tr>
+										</thead>
+										<tbody>
+											@foreach($operational_days2 as $operational_day2)
+											<tr>
+												<td>{{$operational_day2->day}}</td>
+												<td>{{$operational_day2->from_time}}</td>
+												<td>{{$operational_day2->to_time}}</td>
+											</tr>
+											@endforeach
+
+
+										</tbody>
+									</table>
+								</div>
+								<div class="tab-pane fade" id="tab_default_4">
+									<div class="row">
+										<div class="col-sm-6 col-md-offset-3 padd-30">
+											<form action="{{URL('/doctor/redeem-code')}}" method="POST" id="redeemCodeForm">
+												<div class="form-group">
+													<label for="">Coupon Code</label>
+													<input type="text" class="form-control" name="code" id="code" placeholder="Enter Code">
+												</div>
+												<button type="submit" class="btn btn-primary">Submit</button>
+											</form>
+										</div>
 									</div>
 
 								</div>
+
+								<div class="tab-pane fade in active" id="tab_default_5">
+									<table class="table table-responsive">
+										<thead>
+											<tr>
+												<th class="text-bold">Redeem Coupon</th>
+												<th class="text-bold">Patient name </th>
+
+											</tr>
+										</thead>
+										<tbody>
+											@if(count($redeemed_patients))
+											@foreach($redeemed_patients as $redeemed_patient)
+											<tr>
+												<td>{{$redeemed_patient->code}}</td>
+												<td>{{getUserById($redeemed_patient->user_id)->name}}</td>
+											</tr>
+											@endforeach
+											@endif
+										</tbody>
+
+
+									</table>
+								</div>
+
 							</div>
-						</div>
-						<div class="tab-pane" id="tab_default_4">
-							<form action="{{URL('/doctor/redeem-code')}}" method="POST" id="redeemCodeForm">
-								<div class="form-group">
-									<label for="">Redeem</label>
-									<input type="text" class="form-control" name="code" id="code" placeholder="Enter Code">
-								</div>
-								<button type="submit" class="btn btn-primary">Submit</button>
-							</form>
 						</div>
 					</div>
 				</div>
 			</div>
-
 		</div>
-		
-	</div>
+
+	</section>
+
+	<div class="clearfix"></div>
 	@endsection

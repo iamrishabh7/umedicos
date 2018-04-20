@@ -203,5 +203,10 @@ section .section-title {
 		</div>
 	</section>
 	<!-- Team -->
+	<footer>
+	<div class="footer">
+		<a href="">Powered by</a>
+	</div>
+</footer>
 </body>
 </html>

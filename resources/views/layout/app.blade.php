@@ -8,7 +8,7 @@
 	<meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport">
 	<meta name="_token" content="{{ csrf_token() }}" />
 	<!-- Bootstrap 3.3.7 -->
-	<link href='http://fonts.googleapis.com/css?family=Open+Sans:400,300,600' rel='stylesheet' type='text/css'>
+	
 	{{Html::style("css/style.css")}}
 	{{Html::style("assets/plugins/bootstrap/css/bootstrap.min.css")}}
 	{{Html::style("assets/plugins/fontawesome/css/font-awesome.css")}}
@@ -20,8 +20,9 @@
 	@yield('style')
 
 	<body>
+
 		<nav class="navbar navbar-inverse "  role="navigation">
-			<div class="container-fluid">
+			<div class="container">
 				<div class="navbar-header">
 					<button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-ex1-collapse">
 						<span class="sr-only">Toggle navigation</span>
@@ -29,24 +30,28 @@
 						<span class="icon-bar"></span>
 						<span class="icon-bar"></span>
 					</button>
-					<a class="navbar-brand" href="#">Title</a>
+					<a class="navbar-brand" href="#">
+						<img src="https://lh3.googleusercontent.com/do1rTiwv7ksmS59TP6Q_f-B90AN1WNLoPm_lBc3eEANGZ-6xe6pcqGxB5_pIKlcdaN8-HA=s85" alt="logo" class="img-responsive logo">
+
+					</a>
 				</div>
 
 				<div class="collapse navbar-collapse navbar-ex1-collapse">
 					<ul class="nav navbar-nav navbar-right">
 						@if(\Auth::check())
 						<li>
-							<a class="" data-toggle="modal" href="{{\Auth::user()->role == 1 ? URL('/doctor/profile') : URL('/patient/profile')}}">Profile</a>
+							<a class="" data-toggle="modal" href="{{\Auth::user()->role == 1 ? URL('/doctor/profile/edit') : URL('/patient/profile/edit')}}">Edit Profile</a>
+						</li>
+						<li>
+							<a class="" data-toggle="modal" href='#changePassModal'>Change Password</a>
 						</li>
 						<li>
 							<a class="" data-toggle="modal" href="{{URL('/logout')}}">Logout</a>
 						</li>
-						<li>
-							<a class="" data-toggle="modal" href='#changePassModal'>change Password</a>
-						</li>
+						
 						@else
-						<li><a class="" data-toggle="modal" href='#loginModal'>Login</a></li>
-						<li><a class="" data-toggle="modal" href='#registerModal'>Sign up</a></li>
+						<li><a class="" data-toggle="modal" href='#loginModal'><span class="glyphicon glyphicon-user"></span> Sign In</a></li>
+						<li><a class="" data-toggle="modal" href='#registerModal'><span class="glyphicon glyphicon-log-in"></span> Sign up</a></li>
 						@endif
 
 					</ul>
@@ -54,8 +59,6 @@
 			</div>
 		</nav>
 		@yield('content')
-
-
 		<!-- change password Modal -->
 		<div class="modal fade empList-modal-lg " id="changePassModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
 			<div class="modal-dialog">
@@ -226,5 +229,11 @@
 		<script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCHy1BcbxWG5gNfygIGP9DhwqpRUYBgkb0&libraries=places&callback=initAutocomplete"
 		async defer></script>
 		@yield('script')
+
+		<footer>
+			<div class="footer">
+				@include('includes.footer')
+			</div>
+		</footer>
 	</body>
 	</html>
