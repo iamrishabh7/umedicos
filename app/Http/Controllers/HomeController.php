@@ -17,11 +17,11 @@ class HomeController extends Controller
 	{
 		$data = array();
 		if(!empty($request->address) && empty($request->specialization)){
-			$doctorsByAddess = Doctor::where('address1', 'like', '%' . $request->address . '%')->orWhere('address2', 'like', '%' . $request->address . '%')->with('user','clinic')->get();
+			$doctorsByAddess = Doctor::where('address1', 'like', '%' . $request->address . '%')->orWhere('address2', 'like', '%' . $request->address . '%')->with('user','clinic','spacialization')->get();
 			$data['doctors'] = $doctorsByAddess;	
 		}
 		elseif(empty($request->address) && !empty($request->specialization)){
-			$doctorsByAddess= Doctor::where('address1', 'like', '%' . $request->address . '%')->orWhere('address2', 'like', '%' . $request->address . '%')->with('user','clinic')->get();
+			$doctorsByAddess= Doctor::where('address1', 'like', '%' . $request->address . '%')->orWhere('address2', 'like', '%' . $request->address . '%')->with('user','clinic','spacialization')->get();
 			$doctors = array();
 			foreach ($doctorsByAddess as $user) {
 				$doctorsBySpecialization = DoctorSpecialization::where('doctor_id', $user->doctor_id)->where('specialization_id', $request->specialization)->first();
@@ -31,7 +31,7 @@ class HomeController extends Controller
 			}
 			$data['doctors'] = $doctors;	
 		}elseif(!empty($request->address) && !empty($request->specialization)){
-			$doctorsByAddess= Doctor::where('address1', 'like', '%' . $request->address . '%')->orWhere('address2', 'like', '%' . $request->address . '%')->with('user','clinic')->get();
+			$doctorsByAddess= Doctor::where('address1', 'like', '%' . $request->address . '%')->orWhere('address2', 'like', '%' . $request->address . '%')->with('user','clinic','spacialization')->get();
 			$doctors = array();
 			foreach ($doctorsByAddess as $user) {
 				$doctorsBySpecialization = DoctorSpecialization::where('doctor_id', $user->doctor_id)->where('specialization_id', $request->specialization)->first();

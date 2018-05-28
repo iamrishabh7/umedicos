@@ -15,6 +15,17 @@ class DoctorMiddleware
      */
     public function handle($request, Closure $next)
     {
-        return $next($request);
+        if(\Auth::check()){
+           if(\Auth::user()->is_active == 0){
+            \Auth::logout();
+            return  redirect('/login');
+        }
+        if(\Auth::user()->role != 1){
+            return  redirect('/login');
+        }
+    }else{
+        return  redirect('/login');
     }
+    return $next($request);
+}
 }

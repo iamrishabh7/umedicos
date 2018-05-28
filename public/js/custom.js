@@ -1,3 +1,66 @@
+function alphaOnly(evt) {
+	evt = (evt) ? evt : event;
+	var charCode = (evt.charCode) ? evt.charCode : ((evt.keyCode) ? evt.keyCode :
+		((evt.which) ? evt.which : 0));
+	if (charCode > 31 && (charCode < 65 || charCode > 90) &&
+		(charCode < 97 || charCode > 122)) {
+		swal('Oops','Please input alphabet characters only','error');
+	return false;
+}
+return true;
+};
+function isNumber(evt) {
+	evt = (evt) ? evt : window.event;
+	var charCode = (evt.which) ? evt.which : evt.keyCode;
+	if (charCode > 31 && (charCode < 48 || charCode > 57)) {
+		return false;
+	}
+	return true;
+}
+
+function showList(){
+	$('#searchResult').show();
+}
+function search(){
+	var input, filter, ul, li, a, i;
+	input = document.getElementById('searchInput');
+	filter = input.value.toUpperCase();
+	ul = document.getElementById("searchResult");
+	li = ul.getElementsByTagName('li');
+	for (i = 0; i < li.length; i++) {
+		a = li[i].getElementsByTagName("a")[0];
+		if (a.innerHTML.toUpperCase().indexOf(filter) > -1) {
+			li[i].style.display = "";
+		} else {
+			li[i].style.display = "none";
+		}
+	}
+}
+
+function removeClinicImage(baseurl,image_id){
+	var url  = baseurl+'/'+'doctor/remove-clinic-image/'+image_id;
+	$.ajax({
+		url: url,
+		type: 'GET',
+		success: function (data) {
+			console.log(data);
+			if(data.flag){
+				swal('Success',data.message,'success');
+				$("#image_"+image_id).remove();
+			}else{
+				$('#registerModal').modal('toggle');
+				swal('Oops',data.message,'error');  
+			}
+		}
+	});
+}
+function getValue(type,value,id){
+	console.log(type);
+	$("#searchResult" ).hide()
+	$('#type_id').attr('name',type);
+	$('#type_id').val(id);
+	$('#searchInput').val(value);
+}
 function addDay(day){
 	var html = `
 	<label class="col-sm-3"></label>
@@ -24,8 +87,17 @@ function addDay(day){
 	`;
 	$('#days'+day).append(html);
 }
+function validateEmail(email) {
+	var re = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+	return re.test(String(email).toLowerCase());
+}
+function removeDay(day,id){
+	$('#row_'+day+'_'+id).remove();
+}
 $(document).ready(function() {
-
+	// $( "#searchInput" ).blur(function() {
+	// 	$( "#searchResult" ).hide()
+	// });
 	$('#searchDoctorForm').submit(function(event) {
 		if($('#pac_input').val() == ""){
 			swal('Warning','Please Enter Address','error');
@@ -123,14 +195,27 @@ $(document).ready(function() {
 	});
 	$('#registerForm').submit(function(event) {
 		event.preventDefault();
+		var mobile_number = $('#reg_mobile').val();
+		var email = $('#reg_email').val();
+		var flag = 0;
+		if(email != ""){
+			if(!validateEmail(email)){
+				flag = 1;
+			}
+		}
 		if($('#reg_name').val() == ""){
 			swal('Warning','Please Enter Name','error');
 			return false; 
 		}else if($('#reg_mobile').val() == ""){
 			swal('Warning','Please Enter Mobile Number','error');
 			return false; 
+		}else if(mobile_number =! "" && mobile_number.length != 10){
+			swal('Error',"Mobile Number must be of 10 Number",'error');
 		}else if($('#reg_email').val() == ""){
 			swal('Warning','Please Enter Email','error');
+			return false; 
+		}else if(flag == "1"){
+			swal('Warning','Please Enter a Valid Email','error');
 			return false; 
 		}else if($('#reg_password').val() == ""){
 			swal('Warning','Please Enter Password','error');
@@ -153,7 +238,6 @@ $(document).ready(function() {
 						$('#registerModal').modal('toggle');
 						swal('Success',data.message,'success');
 					}else{
-						$('#registerModal').modal('toggle');
 						swal('Oops',data.message,'error');  
 					}
 				}
@@ -161,35 +245,71 @@ $(document).ready(function() {
 		}
 	});
 	$('#doctorEditForm').submit(function(event) {
-		if($('#name').val() == ""){
-			swal('Warning','Please Enter Name','error');
-			return false; 
-		}else if($('#spacialization').val() == null){
-			swal('Warning','Please Select Specialization','error');
-			return false; 
-		}else if($('#profile_pic').val() == ""){
-			swal('Warning','Please Upload Profile Image','error');
-			return false; 
-		}else if($('#primary_contact').val() == ""){
-			swal('Warning','Please Enter Primary Contact Number','error');
-			return false; 
-		}else if($('#address1').val() == ""){
-			swal('Warning','Please Enter Address1','error');
-			return false; 
-		}else if($('#operational_days1').val() == null){
-			swal('Warning','Please Select operational days for Address 1','error');
-			return false; 
-		}else if($('#clinic_images').val() == ""){
-			swal('Warning','Please Select Clinic images','error');
-			return false; 
-		}else if($('#address2').val() != ""){
-			if($('#operational_days2').val() == null){
-				swal('Warning','Please Select operational days for Address 2','error');
+		var is_profile_completed = $('#is_profile_completed').val();
+		if(is_profile_completed == 0){
+			if($('#name').val() == ""){
+				swal('Warning','Please Enter Name','error');
 				return false; 
 			}
+			else if($('#qualification').val() == ""){
+				swal('Warning','Please Enter Qualification','error');
+				return false; 
+			}
+			else if($('#spacialization').val() == null){
+				swal('Warning','Please Select Specialization','error');
+				return false; 
+			}else if($('#profile_pic').val() == ""){
+				swal('Warning','Please Upload Profile Image','error');
+				return false; 
+			}else if($('#primary_contact').val() == ""){
+				swal('Warning','Please Enter Primary Contact Number','error');
+				return false; 
+			}else if($('#pac-input').val() == ""){
+				swal('Warning','Please Enter Address1','error');
+				return false; 
+			}else if($('#operational_days1').val() == null){
+				swal('Warning','Please Select operational days for Address 1','error');
+				return false; 
+			}else if($('#clinic_images').val() == ""){
+				swal('Warning','Please Select Clinic images','error');
+				return false; 
+			}else if($('#pac-input2').val() != ""){
+				if($('#operational_days2').val() == null){
+					swal('Warning','Please Select operational days for Address 2','error');
+					return false; 
+				}
+			}else{
+				return true;
+			}
 		}else{
-			return true;
+			if($('#name').val() == ""){
+				swal('Warning','Please Enter Name','error');
+				return false; 
+			}else if($('#qualification').val() == ""){
+				swal('Warning','Please Enter Qualification','error');
+				return false; 
+			}else if($('#spacialization').val() == null){
+				swal('Warning','Please Select Specialization','error');
+				return false; 
+			}else if($('#primary_contact').val() == ""){
+				swal('Warning','Please Enter Primary Contact Number','error');
+				return false; 
+			}else if($('#pac-input').val() == ""){
+				swal('Warning','Please Enter Address1','error');
+				return false; 
+			}else if($('#operational_days1').val() == null){
+				swal('Warning','Please Select operational days for Address 1','error');
+				return false; 
+			}else if($('#pac-input2').val() != ""){
+				if($('#operational_days2').val() == null){
+					swal('Warning','Please Select operational days for Address 2','error');
+					return false; 
+				}
+			}else{
+				return true;
+			}
 		}
+		
 	});
 
 	$('#redeemCodeForm').submit(function(event) {

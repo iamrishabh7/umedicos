@@ -1,15 +1,21 @@
 @extends('layout.app')
 @section('content')
 @section('title','Edit Profile')
-<div class="row">
-	<div class="col-md-6 col-md-offset-3">
-		
 
+<style type="text/css">
+	@media (max-width: 1024px)
+	{
+		body {position: relative;}
+	}
+</style>
+<div class="container">
+<div class="row">
+	<div class="col-md-6 col-md-offset-3 edit-profile">
 		<div class="panel panel-primary">
 			<div class="panel-heading">
 				<h3 class="panel-title">Edit Profile</h3>
 			</div>
-			<div class="panel-body">
+			<div class="panel-body form-bg">
 				@if (session('success'))
 				<div class="alert alert-success">
 					<a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
@@ -50,5 +56,6 @@
 			</div>
 		</div>
 	</div>
+</div>
 </div>
 @endsection

@@ -2,66 +2,36 @@
 	@section('content')
 	@section('title','Profile')
 	<style>
-	.profile 
-	{
-		min-height: 355px;
-		display: inline-block;
-	}
-	.divider 
-	{
-		border-top:1px solid rgba(0,0,0,0.1);
-	}
-	.emphasis 
-	{
-		border-top: 4px solid transparent;
-	}
-	.emphasis:hover 
-	{
-		border-top: 4px solid #1abc9c;
-	}
-	.emphasis h2
-	{
-		margin-bottom:0;
-	}
 	
-	.dropdown-menu 
-	{
-		background-color: #34495e;    
-		box-shadow: none;
-		-webkit-box-shadow: none;
-		width: 250px;
-		margin-left: -125px;
-		left: 50%;
-	}
-	.dropdown-menu .divider 
-	{
-		background:none;    
-	}
-	.dropdown-menu>li>a
-	{
-		color:#f5f5f5;
-	}
-	.dropup .dropdown-menu 
-	{
-		margin-bottom:10px;
-	}
-	.dropup .dropdown-menu:before 
-	{
-		content: "";
-		border-top: 10px solid #34495e;
-		border-right: 10px solid transparent;
+	/*.divider 
+	{border-top:1px solid rgba(0,0,0,0.1);}
+	.emphasis 
+	{border-top: 4px solid transparent;}
+	.emphasis:hover 
+	{border-top: 4px solid #1abc9c;}
+	.emphasis h2
+	{margin-bottom:0;}
+.dropdown-menu {background-color: #34495e; box-shadow: none; -webkit-box-shadow: none; width: 250px;margin-left: -125px;left: 50%;}
+.dropdown-menu .divider{ background:none;}
+.dropdown-menu>li>a{ color:#f5f5f5;}
+.dropup .dropdown-menu {margin-bottom:10px;}
+	.dropup .dropdown-menu:before { content: ""; border-top: 10px solid #34495e; border-right: 10px solid transparent;
 		border-left: 10px solid transparent;
 		position: absolute;
 		bottom: -10px;
 		left: 50%;
 		margin-left: -10px;
 		z-index: 10;
-	}
+	}*/
+body
+{
+	position: relative;
+}
 </style>
-
+<div class="container">
 <div class="row">
-	<div class="col-md-offset-2 col-md-8 col-lg-offset-3 col-lg-6">
-		<div class="well profile">
+	<div class="col-md-offset-2 col-md-8">
+		<div class="profile">
 			@if($user->is_mobile_verified == 0)
 			<div id="alertDiv">
 				<div class="alert alert-danger">
@@ -71,6 +41,11 @@
 			</div>
 			@endif
 			<div class="col-sm-12">
+				<div class="col-xs-12 col-sm-4 text-center block-none">
+					<figure>
+						<img src="{{URL('/images/user_default.png')}}" alt="" class="img-circle img-responsive">
+					</figure>
+				</div>
 				<div class="col-xs-12 col-sm-8">
 					<h2>{{$user->name}}</h2>
 					<p><strong>Mobile: </strong> {{$user->patient->primary_contact}} </p>
@@ -83,7 +58,7 @@
 						</ul>
 					</p>
 				</div>             
-				<div class="col-xs-12 col-sm-4 text-center">
+				<div class="col-xs-12 col-sm-4 text-center block-show">
 					<figure>
 						<img src="{{URL('/images/user_default.png')}}" alt="" class="img-circle img-responsive">
 					</figure>
@@ -91,13 +66,14 @@
 			</div>            
 			<div class="col-xs-12 divider text-center">
 				<div class="col-xs-12 col-sm-6 emphasis">
-					<a href="{{URL('/')}}" class="btn btn-success btn-block"><span class="fa fa-search"></span>Seach Doctor</a>
+					<a href="{{URL('/')}}" class="btn btn-success btn-block btn-blue-color"><span class="fa fa-search"></span>Seach Doctor</a>
 				</div>
-				<div class="col-xs-12 col-sm-6 emphasis">
+				<!-- <div class="col-xs-12 col-sm-6 emphasis">
 					<a class="btn btn-info btn-block" href="{{URL('patient/profile/edit')}}"><span class="fa fa-user"></span> Edit Profile </a>
-				</div>
+				</div> -->
 				
 			</div>
+		</div> 
 		</div>             
 
 
@@ -140,6 +116,7 @@
 					</div>
 				</div>
 			</div>
-		</div>    
+		</div> 
+
 
 		@endsection

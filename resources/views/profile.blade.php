@@ -1,8 +1,28 @@
 	@extends('layout.app')
 	@section('content')
 	@section('title','Profile')
+
+
+	<style type="text/css">
+	.footer
+	{
+		position: relative !important;
+	}
+	#map {
+		width: 100%;
+		height: 400px;
+		background-color: grey;
+	}
+	.text-bold {font-weight: bold; color: #039be5; }
+	th, td { text-align: left; padding: 30px;}
+	tr:nth-child(even){background-color: #f2f2f2;}
+	.padd-30 {padding-top: 30px;}
+
+
+
+</style>
+
 <header id="header">
-	<div class="container">
 	<div class="slider">
 		<div id="carousel-example-generic" class="carousel slide" data-ride="carousel">
 			<div class="carousel-inner" role="listbox">
@@ -27,109 +47,211 @@
 
 	<nav class="navbar navbar-default">
 		<div class="navbar-header">
-			<button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#mainNav">
-				<span class="sr-only">Toggle navigation</span>
-				<span class="icon-bar"></span>
-				<span class="icon-bar"></span>
-				<span class="icon-bar"></span>
-			</button>
 			<a class="profile_pic" href="#"><img class="img-responsive" src="{{$user->doctor->profile_pic}}"></a>
-			<span class="site-name"><b>{{$user->name}}</span>
-			</div>
-			<div class="collapse navbar-collapse" id="mainNav">
-				<ul class="nav  navbar-nav">
-					<li><a href="#"><i class="fa fa-facebook"></i></a></li>
-					<li><a href="#"><i class="fa fa-twitter"></i></a></li>
-					<li><a href="#"><i class="fa fa-google-plus"></i></a></li>
-				</ul>
-			</div>
-		</nav>
-	</div>
-	</header>  
+			<span class="site-name">{{$user->name}}</span>
+		</div>
+
+	</nav>
+</header>
+
+<div class="clearfix"></div>
+<section class="pro-marg"> 
 	<div class="container">
-		<div class="col-sm-8">
+		<div class="row">
+			<div class="col-md-8 col-md-offset-2">
+				<div class="panel panel-default color-text">
+					<div class="panel-heading">Profile Details</div>
+					<div class="panel-body panel-body-fixh">
+						<ul class="nav nav-tabs">
+							<li class="active"><a href="#tab_default_1" data-toggle="tab">About </a></li>
+							<li><a href="#tab_default_2" data-toggle="tab">Clinic Details</a></li>
+							<li>
+								<a href="#tab_default_3" data-toggle="tab">Operational Days</a>
+							</li>
+							<li>
+								<a href="#tab_default_4" data-toggle="tab">Map</a>
+							</li>
+						</ul>
 
-			<div data-spy="scroll" class="tabbable-panel">
-				<div class="tabbable-line">
-					<ul class="nav nav-tabs ">
-						<li class="active">
-							<a href="#tab_default_1" data-toggle="tab">
-							About </a>
-						</li>
-						<li>
-							<a href="#tab_default_2" data-toggle="tab">
-							Clinic Details</a>
-						</li>
-						<li>
-							<a href="#tab_default_3" data-toggle="tab">
-							Operational Days</a>
-						</li>
-					</ul>
-					<div class="tab-content">
-						<div class="tab-pane active" id="tab_default_1">
-							<h4>Mobile </h4>
-							<p>{{$user->doctor->primary_contact}} , {{$user->doctor->secondary_contact}}</p>
-							<h4>Email</h4>
-							<p>{{$user->email}}</p>
-						</div>
-						<div class="tab-pane" id="tab_default_2">
-							<h4>Specialisation</h4>
-							<p>
-								@foreach($user->doctor_specialization as $doctor_specialization)
-								<span class="label label-success">{{getSpecializationById($doctor_specialization->specialization_id)->name}}</span>
-								@endforeach								
-							</p>
-						</div>
-						<div class="tab-pane" id="tab_default_3">
-							<div class="row">
-								<div class="col-sm-6">
-									<div class="form-group">
-										<label for="email">Address 1</label>
-										<p>{{$user->doctor->address1}}</p>
-									</div>
-									<div class="form-group">
-										<label for="email">Operational Days</label>
-										<p>
-											<?php   $operational_days = explode(',',$user->doctor->operational_days1); ?>
-											@foreach($operational_days as $day)
-											{{$day}}
-											@endforeach
-										</p>
-									</div>
+						<div class="tab-content">
 
-									<div class="form-group">
-										<label for="email">Timing</label>
-										<p>{{$user->doctor->address1_timing}}</p>
-									</div>
-								</div>
-								<div class="col-sm-6">
-									<div class="form-group">
-										<label for="email">Address 2</label>
-										<p>{{$user->doctor->address2}}</p>
-									</div>
-									<div class="form-group">
-										<label for="email">Operational Days</label>
-										<p>
-											<?php   $operational_days = explode(',',$user->doctor->operational_days2); ?>
-											@foreach($operational_days as $day)
-											{{$day}}
-											@endforeach
-										</p>
-									</div>
-									
-									<div class="form-group">
-										<label for="email">Timing</label>
-										<p>{{$user->doctor->address2_timing}}</p>
-									</div>
-								</div>
+							<div class="tab-pane fade in active" id="tab_default_1">
+								<table class="table table-responsive">
+
+									<tbody>
+
+										<tr>
+											<td class="text-bold">Name</td>
+											<td>{{$user->name}}</td>
+										</tr>
+										<tr>
+											<td class="text-bold">Email</td>
+											<td>{{$user->email}}</td>
+										</tr>
+										<tr>
+											<td class="text-bold">Qualification</td>
+											<td>{{$user->doctor->qualification}}</td>
+										</tr>
+										<tr>
+											<td class="text-bold">Mobile</td>
+											<td>{{$user->doctor->primary_contact}} , {{$user->doctor->secondary_contact}}</td>
+										</tr>
+
+										<tr>
+											<td class="text-bold">Specialisation</td>
+											<td>
+												@foreach($user->doctor_specialization as $doctor_specialization)
+												<span>{{getSpecializationById($doctor_specialization->specialization_id)->name}}</span>
+											@endforeach</td>
+										</tr>
+
+									</tbody>
+								</table>
 							</div>
-						</div>
 
+
+
+							<div class="tab-pane fade" id="tab_default_2">
+								<table class="table table-responsive">
+									<tbody>
+										<tr>
+											<td class="text-bold">Registration Number</td>
+											<td>{{$doctor_clinic->registration_number}}</td>
+										</tr>
+										<tr>
+											<td class="text-bold">Address 1</td>
+											<td id="addr1">{{$user->doctor->address1}}</td>
+										</tr>
+
+										<tr>
+											<td class="text-bold">Address 2</td>
+											<td>{{$user->doctor->address2}}</td>
+										</tr>
+
+									</tbody>
+								</table>
+							</div>
+
+							<div class="tab-pane fade" id="tab_default_3">
+
+								<p class="text-bold">Operational Days 1</p>
+								<table class="table table-responsive">
+									<thead>
+										<tr>
+											<th class="text-bold">Days</th>
+											<th class="text-bold">Timing Morning </th>
+											<th class="text-bold">Evening Timing</th>
+										</tr>
+									</thead>
+									<tbody>
+										@foreach($operational_days1 as $operational_day1)
+										<tr>
+											<td>{{$operational_day1->day}}</td>
+											<td>{{$operational_day1->from_time}}</td>
+											<td>{{$operational_day1->to_time}}</td>
+										</tr>
+										@endforeach
+
+
+									</tbody>
+								</table>
+								<p class="text-bold">Operational Days 2</p>
+								<table class="table table-responsive">
+									<thead>
+										<tr>
+											<th class="text-bold">Days</th>
+											<th class="text-bold">Timing Morning </th>
+											<th class="text-bold">Evening Timing</th>
+										</tr>
+									</thead>
+									<tbody>
+										@foreach($operational_days2 as $operational_day2)
+										<tr>
+											<td>{{$operational_day2->day}}</td>
+											<td>{{$operational_day2->from_time}}</td>
+											<td>{{$operational_day2->to_time}}</td>
+										</tr>
+										@endforeach
+
+
+									</tbody>
+								</table>
+							</div>
+
+
+							<div class="tab-pane fade" id="tab_default_4">
+								<div id="map"></div>
+								
+							</div>
+
+
+						</div>
 					</div>
 				</div>
 			</div>
-
 		</div>
-		
 	</div>
-	@endsection
+
+</section>
+
+<div class="clearfix"></div>
+
+@section('script')
+<!-- <script type="text/javascript" src="http://maps.google.com/maps/api/js?sensor=false"></script> -->
+
+<script>
+	
+	var geocoder;
+	var map;
+	var address = document.getElementById("addr1").innerText;
+	function initialize() {
+		geocoder   = new google.maps.Geocoder();
+		var latlng = new google.maps.LatLng(28.644800,77.216721);
+		var myOptions = {
+			zoom: 15,
+			center: latlng,
+			mapTypeControl: true,
+			mapTypeControlOptions: {
+				style: google.maps.MapTypeControlStyle.DROPDOWN_MENU
+			},
+			navigationControl: true,
+			mapTypeId: google.maps.MapTypeId.ROADMAP
+		};
+		map = new google.maps.Map(document.getElementById("map"), myOptions);
+		
+		if (geocoder) {
+			geocoder.geocode({
+				'address': address
+			}, function(results, status) {
+				if (status == google.maps.GeocoderStatus.OK) {
+					if (status != google.maps.GeocoderStatus.ZERO_RESULTS) {
+						map.setCenter(results[0].geometry.location);
+
+						var infowindow = new google.maps.InfoWindow({
+							content: '<b>' + address + '</b>',
+							size: new google.maps.Size(150, 50)
+						});
+
+						var marker = new google.maps.Marker({
+							position: results[0].geometry.location,
+							map: map,
+							title: address
+						});
+						google.maps.event.addListener(marker, 'click', function() {
+							infowindow.open(map, marker);
+						});
+
+					} else {
+						alert("No results found");
+					}
+				} else {
+					alert("Geocode was not successful for the following reason: " + status);
+				}
+			});
+		}
+	}
+	google.maps.event.addDomListener(window, 'load', initialize);
+
+</script>
+@endsection
+@endsection

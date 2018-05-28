@@ -25,7 +25,7 @@ class DoctorController extends Controller
 		}
 		$data['doc_specialization'] = $doc_specialization;
 		$data['specializations'] = Specialization::all();
-		$doctor_clinic = DoctorClinic::where('doctor_id', Auth::user()->id)->first();
+		$data['doctor_clinic'] = $doctor_clinic = DoctorClinic::where('doctor_id', Auth::user()->id)->first();
 		$data['clinic_images'] = ClinicImage::where('clinic_id',$doctor_clinic->id)->get();
 		$data['operational_days1'] = OperationalDay::where('doctor_id', Auth::user()->id)->where('day_type',1)->get();
 		$data['operational_days2'] = OperationalDay::where('doctor_id', Auth::user()->id)->where('day_type',2)->get();
@@ -59,13 +59,19 @@ class DoctorController extends Controller
 				$image->move($destinationPath, $filename);
 				$doctor->profile_pic = url('/images/doctors_images').'/'.$filename;
 			}
-			if($request->clinic_name){
+			if($request->registration_number){
 				$doctor_clinic = DoctorClinic::where('doctor_id',\Auth::user()->id)->first();
-				$doctor_clinic->name = $request->clinic_name;
+				$doctor_clinic->registration_number = $request->registration_number;
 				$doctor_clinic->save();
+			}
+			if($request->qualification){
+				$doctor->qualification = $request->qualification;
 			}
 			if($request->primary_contact){
 				$doctor->primary_contact = $request->primary_contact;
+			}
+			if($request->secondary_contact){
+				$doctor->secondary_contact = $request->secondary_contact;
 			}
 			
 			if($request->address1){
@@ -87,6 +93,7 @@ class DoctorController extends Controller
 			}
 
 			if(count($request->operational_days1)) {
+				DB::table('operational_days')->where('doctor_id', $user->id)->where('day_type', 1)->delete(); 
 				for ($i=0; $i < count($request->operational_days1) ; $i++) { 
 					$operational_days = new OperationalDay();
 					$operational_days->doctor_id = $user->id;
@@ -98,6 +105,7 @@ class DoctorController extends Controller
 				}
 			}
 			if(count($request->operational_days2) > 0 && $request->operational_days2[0] != null) {
+				DB::table('operational_days')->where('doctor_id', $user->id)->where('day_type', 2)->delete(); 
 				for ($i=0; $i < count($request->operational_days2) ; $i++) { 
 					$operational_days = new OperationalDay();
 					$operational_days->doctor_id = $user->id;
@@ -110,7 +118,7 @@ class DoctorController extends Controller
 			}
 
 			if(count($request->clinic_images) > 0){
-				DB::table('clinic_images')->where('clinic_id', $doctor_clinic->id)->delete(); 
+				// DB::table('clinic_images')->where('clinic_id', $doctor_clinic->id)->delete(); 
 				for($i = 0; $i< count($request->clinic_images); $i++){
 					$image = $request->file('clinic_images')[$i];
 					$filename = time().rand().'.'.$image->getClientOriginalExtension();
@@ -136,6 +144,24 @@ class DoctorController extends Controller
 		}
 	}
 
+	public function deleteClinicImage($image_id)
+	{
+		$response = array();
+		$image = ClinicImage::where('id',$image_id)->first();
+		if(is_null($image)){
+			$response['flag'] = false;
+			$response['message'] = 'Image Not found';
+		}else{
+			if($image->delete()){
+				$response['flag'] = true;
+				$response['message'] = 'Image Deleted Successfully';
+			}else{
+				$response['flag'] = false;
+				$response['message'] = 'Something Went Wrong';
+			}
+		}
+		return response()->json($response);
+	}
 	public function redeemCode(Request $request)
 	{
 		$response = array();

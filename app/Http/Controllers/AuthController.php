@@ -10,13 +10,55 @@ use App\Patient;
 use App\RedeemCodes;
 use App\Specialization;
 use Auth;
+use Crypt;
+use DB;
+
 class AuthController extends Controller
 {
 	public function index()
 	{
 		$data = array();
 		$data['specializations'] = Specialization::all();
+		$data['doctors'] =  User::where('is_profile_completed',1)->where('role',1)->with('doctor')->get();
 		return view('welcome',$data);
+	}
+	public function getLogin()
+	{
+		return view('login');
+	}
+	public function postLogin(Request $request)
+	{
+		$validator = \Validator::make(
+			array(
+				'email' =>$request->email,
+				'password' =>$request->password,
+			),
+			array(
+				'email' =>'required|email',
+				'password' =>'required',
+			)
+		);
+		if($validator->fails())
+		{
+			return redirect('/login')
+			->withErrors($validator)
+			->withInput();
+		}
+		else
+		{
+			$creds = ['email'=>$request->email,'password'=>$request->password];
+			if(\Auth::attempt($creds)){
+				if(\Auth::user()->is_active == 0){
+					\Auth::logout();
+					return redirect('/login')->with('error',"Your Account is Deactivated. Please Contact Admin");
+				}else{
+					return redirect('/login');
+				}
+			}
+			else{
+				return redirect('/login')->with('error',"Invalid Email or Password");
+			}
+		}
 	}
 	public function register(Request $request)
 	{
@@ -27,33 +69,58 @@ class AuthController extends Controller
 			$response['message'] = "email already exist";
 		}else{
 
-			$user = new User();
-			$user->name = $request->name;
-			$user->email = $request->reg_email;
-			$user->password = bcrypt($request->reg_password);
-			$user->role = $request->reg_role;
-			if($user->save()){
-				$response['flag'] = true;
-				$response['message'] = "Registered Successfully";
-				if($request->reg_role == 1){
-					$doctor = new Doctor;
-					$doctor->doctor_id = $user->id;
-					$doctor->primary_contact = $request->reg_mobile;
-					$doctor->save();
-
-					$doctor_clinic = new DoctorClinic;
-					$doctor_clinic->doctor_id = $user->id;
-					$doctor_clinic->save();
-					
-				}else{
-					$patient = new Patient;
-					$patient->patient_id = $user->id;
-					$patient->primary_contact = $request->reg_mobile;
-					$patient->save();
-				}
-			}else{
+			$patient = Patient::where('primary_contact',$request->reg_mobile)->first();
+			if(!is_null($patient)){
 				$response['flag'] = false;
-				$response['message'] = "Failed To save";
+				$response['message'] = "Mobile Number Already Registered";
+			}else{
+				$user = new User();
+				$user->name = $request->name;
+				$user->email = $request->reg_email;
+				$user->password = bcrypt($request->reg_password);
+				$user->role = $request->reg_role;
+				if($user->save()){
+					$response['flag'] = true;
+					$response['message'] = "Registered Successfully";
+					if($request->reg_role == 1){
+						$doctor = new Doctor;
+						$doctor->doctor_id = $user->id;
+						$doctor->primary_contact = $request->reg_mobile;
+						$doctor->save();
+
+						$doctor_clinic = new DoctorClinic;
+						$doctor_clinic->doctor_id = $user->id;
+						if($doctor_clinic->save()){
+							$value = rand();
+							\DB::table('password_resets')->insert(['email' => $request->reg_email, 'type' => 'emailVerify', 'token' => $value]);
+
+							$templateData['code'] = Crypt::encrypt($value);;
+							$templateData['name'] = $user->name;
+							$MailData = new \stdClass();
+							$MailData->receiver_email = $request->reg_email;
+							$MailData->receiver_name = $user->name;
+							$MailData->subject = 'Welcome to DocApp';
+							MailController::sendMail('emailVerify',$templateData,$MailData);
+						}
+					}else{
+						$patient = new Patient;
+						$patient->patient_id = $user->id;
+						$patient->primary_contact = $request->reg_mobile;
+						if($patient->save()){
+							\DB::table('password_resets')->insert(['email' => $request->reg_email, 'type' => 'emailVerify', 'token' => $value]);
+							$templateData['code'] = Crypt::encrypt($value);;
+							$templateData['name'] = $user->name;
+							$MailData = new \stdClass();
+							$MailData->receiver_email = $request->reg_email;
+							$MailData->receiver_name = $user->name;
+							$MailData->subject = 'Welcome to DocApp';
+							MailController::sendMail('emailVerify',$templateData,$MailData);
+						}
+					}
+				}else{
+					$response['flag'] = false;
+					$response['message'] = "Failed To save";
+				}
 			}
 		}
 		return response()->json($response);
@@ -64,22 +131,31 @@ class AuthController extends Controller
 		$creds = ['email'=>$request->login_email,'password'=>$request->login_password];
 		if(\Auth::attempt($creds)){
 			$user = \Auth::user();
-			if($user->role == 1){
-				$response['flag'] = true;
-				if($user->is_profile_completed){
-					$response['next_url'] = url('/').'/doctor/profile';
+			if($user->is_active){
+				if($user->role == 0){
+					$response['flag'] = true;
+					$response['next_url'] = url('/').'/admin/dashboard';
+				} elseif($user->role == 1){
+					$response['flag'] = true;
+					if($user->is_profile_completed){
+						$response['next_url'] = url('/').'/doctor/profile';
+					}else{
+						$response['next_url'] = url('/').'/doctor/profile/edit';
+					}
 				}else{
-					$response['next_url'] = url('/').'/doctor/profile/edit';
+					$response['flag'] = true;
+					$user->is_profile_completed = 1;
+					$user->save();
+					if($user->is_profile_completed){
+						$response['next_url'] = url('/').'/patient/profile';
+					}else{
+						$response['next_url'] = url('/').'/patient/profile';
+					}
 				}
 			}else{
-				$response['flag'] = true;
-				$user->is_profile_completed = 1;
-				$user->save();
-				if($user->is_profile_completed){
-					$response['next_url'] = url('/').'/patient/profile';
-				}else{
-					$response['next_url'] = url('/').'/patient/profile';
-				}
+				\Auth::logout();
+				$response['flag'] = false;
+				$response['message'] = "Acount is Deactivated. Please Contact Support.";
 			}
 		}
 		else{
@@ -203,6 +279,18 @@ class AuthController extends Controller
 		return response()->json($response);
 	}
 
+	public function email_activation($token){
+		$value = Crypt::decrypt($token);
+		$resetData = DB::table('password_resets')->where('type','emailVerify')->where('token',$value)->first();
+		if(count($resetData) == 1){
+			DB::table('users')->where('email',$resetData->email)->update(['is_active'=> 1 ]);
+			DB::table('password_resets')->where('email',$resetData->email)->delete();
+			return redirect('/login')->with('success','Email Verified Successfully !');
+		}else{			
+			return redirect('/login')->with('message','Token invalid or Expired !');			
+		}
+
+	}
 
 	public function logout()
 	{
