@@ -19,7 +19,13 @@ class AuthController extends Controller
 	{
 		$data = array();
 		$data['specializations'] = Specialization::all();
-		$data['doctors'] =  User::where('is_profile_completed',1)->where('role',1)->with('doctor')->get();
+		$data['doctors'] =  User::where('is_profile_completed',1)->where('is_active',1)->where('role',1)->with('doctor')->get();
+		$cities = array();
+		$doctorsByCity= Doctor::get();
+		foreach ($doctorsByCity as $doctorByCity) {
+			array_push($cities,$doctorByCity->city);
+		}
+		$data['cities'] = array_unique($cities);
 		return view('welcome',$data);
 	}
 	public function getLogin()
@@ -90,6 +96,7 @@ class AuthController extends Controller
 
 						$doctor_clinic = new DoctorClinic;
 						$doctor_clinic->doctor_id = $user->id;
+						// $doctor_clinic->save();
 						if($doctor_clinic->save()){
 							$value = rand();
 							\DB::table('password_resets')->insert(['email' => $request->reg_email, 'type' => 'emailVerify', 'token' => $value]);
@@ -106,7 +113,9 @@ class AuthController extends Controller
 						$patient = new Patient;
 						$patient->patient_id = $user->id;
 						$patient->primary_contact = $request->reg_mobile;
+						// $patient->save();
 						if($patient->save()){
+							$value = rand();
 							\DB::table('password_resets')->insert(['email' => $request->reg_email, 'type' => 'emailVerify', 'token' => $value]);
 							$templateData['code'] = Crypt::encrypt($value);;
 							$templateData['name'] = $user->name;

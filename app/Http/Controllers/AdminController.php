@@ -14,7 +14,12 @@ class AdminController extends Controller
 {
 	public function dashboard()
 	{
-		return view('admin.dashboard');
+		$data = array();
+		$data['active_doctors_count'] = \App\User::where('role','=',1)->where('is_active','=',1)->count();
+		$data['in_active_doctors_count'] = \App\User::where('role','=',1)->where('is_active','=',0)->count();
+		$data['active_patients_count'] = \App\User::where('role','=',2)->where('is_active','=',1)->count();
+		$data['in_active_patients_count'] = \App\User::where('role','=',2)->where('is_active','=',0)->count();
+		return view('admin.dashboard',$data);
 	}
 
 	public function doctors(Request $request)

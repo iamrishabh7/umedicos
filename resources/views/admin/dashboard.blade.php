@@ -23,7 +23,7 @@
 								<i class="icon-users"></i>
 							</div>
 							<div class="info-box-stats">
-								<span class="info-box-title">Active Doctors</span>
+								<span class="info-box-title">Active Doctors ({{$active_doctors_count}})</span>
 							</div>
 
 						</div>
@@ -39,7 +39,7 @@
 								<i class="icon-users"></i>
 							</div>
 							<div class="info-box-stats">
-								<span class="info-box-title">In-Active Doctors</span>
+								<span class="info-box-title">In-Active Doctors  ({{$in_active_doctors_count}})</span>
 							</div>
 
 						</div>
@@ -56,7 +56,7 @@
 								<i class="icon-users"></i>
 							</div>
 							<div class="info-box-stats">
-								<span class="info-box-title">Active Patients</span>
+								<span class="info-box-title">Active Patients  ({{$active_patients_count}})</span>
 							</div>
 
 						</div>
@@ -72,7 +72,7 @@
 								<i class="icon-users"></i>
 							</div>
 							<div class="info-box-stats">
-								<span class="info-box-title">In-Active Patients</span>
+								<span class="info-box-title">In-Active Patients  ({{$in_active_patients_count}})</span>
 							</div>
 
 						</div>

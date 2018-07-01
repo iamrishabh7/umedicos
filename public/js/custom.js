@@ -18,8 +18,42 @@ function isNumber(evt) {
 	return true;
 }
 
-function showList(){
-	$('#searchResult').show();
+function showCityList(){
+	$('#searchCityResult').show();
+}
+function showList(baseurl){
+	if($('#city').val() == ""){
+		$('#searchResult').show();
+	}else{
+		$('#searchResult').show().html('');
+		var url  = baseurl+'/'+'get-result-by-location/'+$('#city').val();
+		$.ajax({
+			url: url,
+			type: 'GET',
+			success: function (data) {
+				var spacializations = '';
+				var doctors = '';
+				$('#searchCityResult').empty();
+				$.each(data.spacializations, function(index,spacialization) {
+					spacializations+=
+					`<li onClick="getValue('specialization','`+spacialization.name.charAt(0).toUpperCase() + spacialization.name.substr(1)+`',`+spacialization.id+`)">
+					<a href="javascript:void(0)""><img src="`+baseurl+`/images/searchicon.png" alt="" >`+spacialization.name.charAt(0).toUpperCase() + spacialization.name.substr(1)+`</a></li>`;
+				});
+
+				$.each(data.doctors, function(index,doctor) {
+					doctors+=
+					`<li onClick="getValue('doctor','`+doctor.name.charAt(0).toUpperCase() + doctor.name.substr(1)+`',`+doctor.id+`)">
+					<a href="`+baseurl+`/doctorID/`+doctor.id+`"><img src="`+doctor.profile_pic+`" alt="" height="30" width="30" >
+					`+doctor.name.charAt(0).toUpperCase() + doctor.name.substr(1)+`</a>
+					</li>`;
+				});
+				spacializations+=doctors;
+				$('#searchResult').show();
+				$('#searchResult').html(spacializations);
+				
+			}
+		});
+	}
 }
 function search(){
 	var input, filter, ul, li, a, i;
@@ -36,7 +70,37 @@ function search(){
 		}
 	}
 }
+function searchCity(baseurl,keyword){
+	if(keyword == ""){
+		$('#searchCityResult').hide();
+	}else{
 
+		var url  = baseurl+'/'+'get-cities/'+keyword;
+		$.ajax({
+			url: url,
+			type: 'GET',
+			success: function (data) {
+				var cities = '';
+				$('#searchCityResult').empty();
+				if(data.flag){
+					$.each(data.cities, function(index,city) {
+						cities+=`<li onClick="getCity('`+city+`')">
+						<a href="javascript:void(0)"><img src="`+baseurl+`/images/searchicon.png" alt="" >`
+						+city.charAt(0).toUpperCase() + city.substr(1)+`</a>`
+					});
+					$('#searchCityResult').show();
+					$('#searchCityResult').html(cities);
+				}else{
+				}
+			}
+		});
+	}
+}
+
+function getCity(city){
+	$('#city').val(city);
+	$('#searchCityResult').hide();
+}
 function removeClinicImage(baseurl,image_id){
 	var url  = baseurl+'/'+'doctor/remove-clinic-image/'+image_id;
 	$.ajax({
@@ -251,7 +315,13 @@ $(document).ready(function() {
 				swal('Warning','Please Enter Name','error');
 				return false; 
 			}
-			else if($('#qualification').val() == ""){
+			else if($('#city').val() == ""){
+				swal('Warning','Please Enter City','error');
+				return false; 
+			}else if($('#pincode').val() == ""){
+				swal('Warning','Please Enter Pincode','error');
+				return false; 
+			}else if($('#qualification').val() == ""){
 				swal('Warning','Please Enter Qualification','error');
 				return false; 
 			}
@@ -284,6 +354,12 @@ $(document).ready(function() {
 		}else{
 			if($('#name').val() == ""){
 				swal('Warning','Please Enter Name','error');
+				return false; 
+			}else if($('#city').val() == ""){
+				swal('Warning','Please Enter City','error');
+				return false; 
+			}else if($('#pincode').val() == ""){
+				swal('Warning','Please Enter Pincode','error');
 				return false; 
 			}else if($('#qualification').val() == ""){
 				swal('Warning','Please Enter Qualification','error');

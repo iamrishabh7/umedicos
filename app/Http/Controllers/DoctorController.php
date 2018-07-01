@@ -64,8 +64,14 @@ class DoctorController extends Controller
 				$doctor_clinic->registration_number = $request->registration_number;
 				$doctor_clinic->save();
 			}
+
+			$doctor->pincode = $request->pincode;
+			$doctor->city = $request->city;
 			if($request->qualification){
 				$doctor->qualification = $request->qualification;
+			}
+			if($request->consultation_fee){
+				$doctor->consultation_fee = $request->consultation_fee;
 			}
 			if($request->primary_contact){
 				$doctor->primary_contact = $request->primary_contact;

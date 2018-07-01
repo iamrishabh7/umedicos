@@ -18,10 +18,14 @@
 	{{Html::style("css/select2.min.css")}}
 	@yield('style')
 
+<style>
+	img.img-responsive.logo { width: 150px; padding-top: 10px;}
+</style>
+
 	<body>
 
 		<nav class="navbar navbar-inverse "  role="navigation">
-			<div class="container">
+			<div class="container abc">
 				<div class="navbar-header">
 					<button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-ex1-collapse">
 						<span class="sr-only">Toggle navigation</span>
@@ -30,7 +34,10 @@
 						<span class="icon-bar"></span>
 					</button>
 					<a class="navbar-brand" href="{{URL('/')}}">
-						<img src="https://image.flaticon.com/icons/svg/840/840644.svg" alt="logo" class="img-responsive logo"><span style="color: #08aaf4; padding-left: 8px;">DocApp</span>
+						<img src="{{URL('/images/logo.png')}}" class=" img-responsive logo">
+
+					<!-- 
+						<img src="https://image.flaticon.com/icons/svg/840/840644.svg" alt="logo" class="img-responsive logo"><span style="color: #08aaf4; padding-left: 8px;">DocApp</span> -->
 
 					</a>
 				</div>

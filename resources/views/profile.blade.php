@@ -22,7 +22,7 @@
 
 </style>
 
-<header id="header">
+<header id="header" >
 	<div class="slider">
 		<div id="carousel-example-generic" class="carousel slide" data-ride="carousel">
 			<div class="carousel-inner" role="listbox">
@@ -69,7 +69,7 @@
 								<a href="#tab_default_3" data-toggle="tab">Operational Days</a>
 							</li>
 							<li>
-								<a href="#tab_default_4" data-toggle="tab">Map</a>
+								<a href="#tab_default_4" data-toggle="tab" onclick="getLocation();">Map</a>
 							</li>
 						</ul>
 
@@ -85,9 +85,10 @@
 											<td>{{$user->name}}</td>
 										</tr>
 										<tr>
-											<td class="text-bold">Email</td>
-											<td>{{$user->email}}</td>
+											<td class="text-bold">Consultation Fee</td>
+											<td>{{$user->doctor->consultation_fee}}</td>
 										</tr>
+										
 										<tr>
 											<td class="text-bold">Qualification</td>
 											<td>{{$user->doctor->qualification}}</td>
@@ -180,8 +181,7 @@
 
 
 							<div class="tab-pane fade" id="tab_default_4">
-								<div id="map"></div>
-								
+								<iframe width="640" height="480" frameborder="0" scrolling="no" marginheight="0" marginwidth="0" src="https://maps.google.it/maps?q={{urlencode($user->doctor->address1)}}&output=embed"></iframe>
 							</div>
 
 
@@ -196,62 +196,9 @@
 
 <div class="clearfix"></div>
 
+
 @section('script')
-<!-- <script type="text/javascript" src="http://maps.google.com/maps/api/js?sensor=false"></script> -->
-
 <script>
-	
-	var geocoder;
-	var map;
-	var address = document.getElementById("addr1").innerText;
-	function initialize() {
-		geocoder   = new google.maps.Geocoder();
-		var latlng = new google.maps.LatLng(28.644800,77.216721);
-		var myOptions = {
-			zoom: 15,
-			center: latlng,
-			mapTypeControl: true,
-			mapTypeControlOptions: {
-				style: google.maps.MapTypeControlStyle.DROPDOWN_MENU
-			},
-			navigationControl: true,
-			mapTypeId: google.maps.MapTypeId.ROADMAP
-		};
-		map = new google.maps.Map(document.getElementById("map"), myOptions);
-		
-		if (geocoder) {
-			geocoder.geocode({
-				'address': address
-			}, function(results, status) {
-				if (status == google.maps.GeocoderStatus.OK) {
-					if (status != google.maps.GeocoderStatus.ZERO_RESULTS) {
-						map.setCenter(results[0].geometry.location);
-
-						var infowindow = new google.maps.InfoWindow({
-							content: '<b>' + address + '</b>',
-							size: new google.maps.Size(150, 50)
-						});
-
-						var marker = new google.maps.Marker({
-							position: results[0].geometry.location,
-							map: map,
-							title: address
-						});
-						google.maps.event.addListener(marker, 'click', function() {
-							infowindow.open(map, marker);
-						});
-
-					} else {
-						alert("No results found");
-					}
-				} else {
-					alert("Geocode was not successful for the following reason: " + status);
-				}
-			});
-		}
-	}
-	google.maps.event.addDomListener(window, 'load', initialize);
-
 </script>
 @endsection
 @endsection

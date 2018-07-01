@@ -64,7 +64,7 @@ span.book_avlbl {text-transform:  capitalize;}
 
 				<div class="col-md-3 pull-right view-proffile">
 					<p>
-						<a href="https://www.google.com/maps?saddr=My+Location&daddr={{urlencode($doctor->address1)}}" target="_blank" class="btn btn-primary11" style="color: white;">View on Map</a>
+						<a href="https://www.google.com/maps/dir/?api=1&origin=my location&destination=={{urlencode($doctor->address1)}}" target="_blank" class="btn btn-primary11" style="color: white;">View on Map</a>
 						<a href="{{URL('/doctorID/'.$doctor->doctor_id)}}" class="btn btn-primary11" style="color: white;">View profile</a>
 					</p>
 
@@ -78,7 +78,7 @@ span.book_avlbl {text-transform:  capitalize;}
 				<div class="no-result">
 					<h1></h1>
 					<p>No Doctors Found</p>
-					<a href="http://ec2-13-126-124-46.ap-south-1.compute.amazonaws.com">Go to Home</a>
+					<a href="{{URL('/')}}">Go to Home</a>
 				</div>
 			</div>
 			@endif
@@ -107,7 +107,7 @@ span.book_avlbl {text-transform:  capitalize;}
 	@section('script')
 	<script>
 		function showMap(url) {
-			$('#mapIframe').attr('src','https://www.google.com/maps?saddr=My+Location&daddr='+url);
+			$('#mapIframe').attr('src','https://www.google.com/maps/dir/?api=1&origin=my location&destination='+url);
 			$('#mapModal').modal('toggle');
 		}
 	</script>

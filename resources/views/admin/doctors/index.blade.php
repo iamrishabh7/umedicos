@@ -41,14 +41,14 @@
 					</div>
 
 					<div class="panel-heading clearfix">
-						
+						<a href="#">Total Doctors <span class="badge">{{count($doctors)}}</span></a><br>
 					</div>
 					<div class="panel-body">
 						<div class="table-responsive table-remove-padding">
 							<table class="table" id="datatable">
 								<thead>
 									<tr>
-										<th>#</th>
+										<th>S.No</th>
 										<th>Photo</th>
 										<th>Name</th>
 										<th>Email</th>
@@ -58,9 +58,10 @@
 									</tr>
 								</thead>
 								<tbody>
+									<?php $i = 1; ?>
 									@foreach($doctors as $doctor)
 									<tr>
-										<td>{{$doctor->id}}</td>
+										<td>{{$i}}</td>
 										<td><img src="{{is_null($doctor->doctor->profile_pic) ? '/images/user_default.png':$doctor->doctor->profile_pic}}" alt="" height="50" width="50" class="img-circle"></td>
 										<td>{{$doctor->name}}</td>
 										<td>{{$doctor->email}}</td>
@@ -82,6 +83,7 @@
 											<a class="btn btn-danger" href="{{URL('admin/doctor/delete/'.$doctor->id)}}">Delete</a>
 										</td>
 									</tr>
+									<?php $i++ ; ?>
 									@endforeach
 								</tbody>
 							</table>

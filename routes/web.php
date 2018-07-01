@@ -19,10 +19,13 @@ Route::post('/change-password','AuthController@postChangePassword');
 Route::post('/send-otp','AuthController@sendOtp');
 Route::post('/verify-otp','AuthController@verifyOtp');
 Route::get('/logout','AuthController@logout');
+Route::get('/get-cities/{keyword}','HomeController@getCities');
+Route::get('/get-result-by-location/{location}','HomeController@getResultByLocation');
 Route::get('/search','HomeController@search');
 Route::get('/doctorID/{id}','HomeController@doctorPublicProfile');
 Route::get('/email_activation/{token}', 'AuthController@email_activation');
 Route::get('/message', 'AuthController@myMessage');
+Route::get('/send-mail', 'AuthController@sendMail');
 
 
 
