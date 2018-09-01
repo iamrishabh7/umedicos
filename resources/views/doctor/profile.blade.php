@@ -198,7 +198,7 @@
 										<tr>
 											<th class="text-bold">Redeem Coupon</th>
 											<th class="text-bold">Patient Name </th>
-
+											<th class="text-bold">Discount</th>
 										</tr>
 									</thead>
 									<tbody>
@@ -207,6 +207,7 @@
 										<tr>
 											<td>{{$redeemed_patient->code}}</td>
 											<td>{{getUserById($redeemed_patient->user_id)->name}}</td>
+											<td>{{(isset($redeemed_patient->type) && $redeemed_patient->type == REDEEM_TYPE_50) ? "50%" : (($redeemed_patient->type == REDEEM_TYPE_20) ? "20%" : "" )}}</td>
 										</tr>
 										@endforeach
 										@endif

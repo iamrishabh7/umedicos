@@ -53,7 +53,7 @@ body
 					<p><strong>Coupon Codes: </strong>
 						<ul class="list-group">
 							@foreach($user->redeem_codes as $redeem_code)
-							<li class="list-group-item">{{$redeem_code->code}} <span class="pull-right label label-{{ $redeem_code->is_used == "1" ? "warning":"success" }}">{{ $redeem_code->is_used == "1" ? "Used":"Free" }}</span></li>
+							<li class="list-group-item">{{$redeem_code->code}} <span class="pull-right label label-{{ $redeem_code->is_used == "1" ? "warning":"success" }}">{{ $redeem_code->is_used == "1" ? "Used": (($redeem_code->type == REDEEM_TYPE_50) ? "50%" : "20%") }}</span></li>
 							@endforeach
 						</ul>
 					</p>
@@ -63,15 +63,15 @@ body
 						<img src="{{URL('/images/user_default.png')}}" alt="" class="img-circle img-responsive">
 					</figure>
 				</div>
-			</div>            
+			</div>
 			<div class="col-xs-12 divider text-center">
 				<div class="col-xs-12 col-sm-6 emphasis">
-					<a href="{{URL('/')}}" class="btn btn-success btn-block btn-blue-color"><span class="fa fa-search"></span>Seach Doctor</a>
+					<a href="{{URL('/')}}" class="btn btn-success btn-block btn-blue-color"><span class="fa fa-search"></span>	Search Doctor</a>
 				</div>
 				<!-- <div class="col-xs-12 col-sm-6 emphasis">
 					<a class="btn btn-info btn-block" href="{{URL('patient/profile/edit')}}"><span class="fa fa-user"></span> Edit Profile </a>
 				</div> -->
-				
+
 			</div>
 		</div> 
 		</div>             

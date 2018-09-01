@@ -69,7 +69,7 @@
 
 #searchbanner {
   padding: 45px 0 50px 0;
-  background: #43725b url(http://www.snhiswaziland.com/images/doctor.jpg) top right no-repeat;
+  background: #43725b url({{url("images/home-page-banner.jpg")}}) top right no-repeat;
   background-size: cover;
   min-height:500px;
   height: 100%;
@@ -80,19 +80,21 @@
 .desktop-banner-container {
   position:relative;
 
-  width: 70%;
-  height: 100%;
-  background: -webkit-linear-gradient(left, #48cfad 5%, #3bafda 90%);
-  background: -moz-linear-gradient(left, #48cfad 5%, #3bafda 90%);
-  background: -o-linear-gradient(left, #48cfad 5%, #3bafda 90%);
-  background: -ms-linear-gradient(left, #48cfad 5%, #3bafda 90%);
-  background: linear-gradient(to right, #48cfad 5%, #3bafda 90%);
-  -webkit-transform: skewX(-30deg);
-  -moz-transform: skewX(-30deg);
-  -o-transform: skewX(-30deg);
-  -ms-transform: skewX(-30deg);
-  /* transform: skewX(-30deg); */
-  margin-left: -110px;
+  /*width: 70%;*/
+  /*height: 100%;*/
+  /*background: -webkit-linear-gradient(left, #48cfad 5%, #3bafda 90%);*/
+  /*background: -moz-linear-gradient(left, #48cfad 5%, #3bafda 90%);*/
+  /*background: -o-linear-gradient(left, #48cfad 5%, #3bafda 90%);*/
+  /*background: -ms-linear-gradient(left, #48cfad 5%, #3bafda 90%);*/
+  /*background: linear-gradient(to right, #48cfad 5%, #3bafda 90%);*/
+  /*-webkit-transform: skewX(-30deg);*/
+  /*-moz-transform: skewX(-30deg);*/
+  /*-o-transform: skewX(-30deg);*/
+  /*-ms-transform: skewX(-30deg);*/
+  /*/!* transform: skewX(-30deg); *!/*/
+  /*margin-left: -110px;*/
+    background-color: #3bafda; /* For browsers that do not support gradients */
+    background: linear-gradient(to bottom right, #48cfad, #3bafda);
 }
 
 .desktop-banner {
@@ -137,14 +139,21 @@
       color: #edf4fb;;
       text-transform: sentance;
       padding: 75px 0px 30px 15px;
-      -webkit-transform: skewX(30deg);
-      -moz-transform: skewX(30deg);
-      -o-transform: skewX(30deg);
-      -ms-transform: skewX(30deg);
+      /*-webkit-transform: skewX(30deg);*/
+      /*-moz-transform: skewX(30deg);*/
+      /*-o-transform: skewX(30deg);*/
+      /*-ms-transform: skewX(30deg);*/
       margin-left: 227px;
 
     }
 
+.box-tex-doctor-image {
+    padding: 30px 0px 0px 0px;
+    /*-webkit-transform: skewX(30deg);*/
+    /*-moz-transform: skewX(30deg);*/
+    /*-o-transform: skewX(30deg);*/
+    /*-ms-transform: skewX(30deg);*/
+}
     #why {
       width: 100%;
       background-color: #f1f9fc;
@@ -433,6 +442,11 @@
         margin-left: 95px;
 
       }
+
+        .box-tex-doctor-image {
+
+            padding: 22px 8px 22px 8px;
+        }
     }
 
     @media(min-width:768px) and (max-width:1024px)
@@ -442,6 +456,9 @@
         margin-left: 95px;
         font-size:30px
 
+      }
+      .box-tex-doctor-image {
+        padding: 10px 30px 15px 30px;
       }
     }
 
@@ -559,15 +576,16 @@
   <div class="container-fluid desktop-banner-container">
    <div class="row">
 
-    <div class="col-md-12">
+    <div class="col-md-8">
      <div class="box-tex">
       <p>Find the best doctors around you, <br/>and get instant discount. </p>
       <p><a data-toggle="modal" href="#registerModal" class="btn btn-primary btn-lg">Register for free</a></p>
   </div>
-</div>
-      <!-- <div class="col-md-4">
-      <img src="{{URL('/images/doc1.jpg')}}">
-    </div> -->
+    </div>
+       <div class="col-md-4">
+           <div class="box-tex-doctor-image"><img src="{{URL('/images/doc1.jpg')}}">
+           </div>
+       </div>
   </div>
 </div>
 
@@ -577,14 +595,14 @@
   <div class="container">
     <div class="row ">
       <div class="col-md-12">
-        <h2>Why UDOC?</h2>
+        <h2>Why UMEDICOS?</h2>
         <div class="list-text">
           <ul>
             <li><span>&#10004;</span> Simple and easy to use</li>
-            <li><span>&#10004;</span>  Zero registration fees</li>
+            <li><span>&#10004;</span> 50 rupees registration fees</li>
             <li> <span>&#10004;</span> Cut down your time searching for best doctors</li>
             <li><span>&#10004;</span> Verified doctors</li>
-            <li><span>&#10004;</span>  25% instant discount on consulting fees guaranteed</li>
+            <li><span>&#10004;</span> 50% instant discount on consulting fees guaranteed</li>
           </ul>
         </div>
       </div>

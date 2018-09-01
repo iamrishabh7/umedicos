@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 use App\User;
 use App\Doctor;
@@ -244,11 +245,16 @@ class AuthController extends Controller
 					$code_array = array();
 					$ifExist = \App\RedeemCodes::where('user_id',Auth::user()->id)->get();
 					if(count($ifExist) == 0){
-						for($i=0;$i<4;$i++){	
+						for($i=0;$i<3;$i++){
 							$redeem_codes = new \App\RedeemCodes();
 							$name_array = explode(' ',$user->name);
 							$redeem_codes->code = strtoupper(substr($user->name,0,strlen($name_array[0])).randomstring(4));
 							$redeem_codes->user_id = $user->id;
+							if($i == 0)
+								$redeem_codes->type = REDEEM_TYPE_50;
+							else
+								$redeem_codes->type = REDEEM_TYPE_20;
+							$redeem_codes->expiry_date = Carbon::today()->addMonth(3);
 							$redeem_codes->save();
 							array_push($code_array,$redeem_codes->code);
 						}

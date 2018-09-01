@@ -180,7 +180,12 @@ class DoctorController extends Controller
 			$code->is_used = 1;
 			if($code->save()){
 				$response['flag'] = true;
-				$response['message'] = 'Code Applied Successfully';
+				if(isset($code['type']) && $code['type'] == REDEEM_TYPE_50)
+					$response['message'] = 'Code Applied Successfully. Coupon discount is 50%';
+				elseif(isset($code['type']) && $code['type'] == REDEEM_TYPE_20)
+					$response['message'] = 'Code Applied Successfully. Coupon discount is 20%';
+				else
+					$response['message'] = 'Code Applied Successfully';
 			}else{
 				$response['flag'] = false;
 				$response['message'] = 'Something Went Wrong';
